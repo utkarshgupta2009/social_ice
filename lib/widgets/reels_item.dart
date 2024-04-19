@@ -87,7 +87,7 @@ class _ReelsItemState extends State<ReelsItem> {
                 height:double.infinity,
                 child: Center(
                   child: Container(
-                    height: Get.height*0.85,
+                    height: Get.height,
                     child: SizedBox(
                       height: controller!.value.size.height,
                       child: VideoPlayer(controller!),
@@ -165,16 +165,17 @@ class _ReelsItemState extends State<ReelsItem> {
                   ]),
                 )),
             Positioned(
-              bottom: Get.height * 0.02,
+              bottom: Get.height * 0.08,
               left: Get.width*0.03,
               right: Get.width*0.13,
               child: Container(
                 decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Color.fromARGB(75, 0, 0, 0),
+                        color: Color.fromARGB(88, 0, 0, 0),
                         blurRadius: 30,
-                        blurStyle: BlurStyle.normal
+                        blurStyle: BlurStyle.normal,
+                        spreadRadius: 30
                       )]),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

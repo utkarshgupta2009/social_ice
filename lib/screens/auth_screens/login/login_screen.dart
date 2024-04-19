@@ -41,32 +41,38 @@ class _ScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: Get.height * 0.07),
-              Form(
-                key: emailKey,
-                child: MyTextField(
-                  controller: emailController,
-                  hintText: "email",
-                  obscureText: false,
-                  prefixIcon: Icon(Icons.account_circle_rounded,
-                      size: Get.height * 0.028),
-                  inputType: 'email',
-                  onChanged: (text) {
-                    if (emailKey.currentState!.validate()) {}
-                  },
+              Padding(
+                padding:  EdgeInsets.all(Get.height*0.015),
+                child: Form(
+                  key: emailKey,
+                  child: MyTextField(
+                    controller: emailController,
+                    hintText: "email",
+                    obscureText: false,
+                    prefixIcon: Icon(Icons.account_circle_rounded,
+                        size: Get.height * 0.028),
+                    inputType: 'email',
+                    onChanged: (text) {
+                      if (emailKey.currentState!.validate()) {}
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: Get.height * 0.03),
-              Form(
-                key: passwordKey,
-                child: MyTextField(
-                  controller: passwordController,
-                  hintText: "password",
-                  obscureText: true,
-                  prefixIcon: Icon(Icons.lock, size: Get.height * 0.028),
-                  inputType: 'password',
-                  onChanged: (text) {
-                    if (passwordKey.currentState!.validate()) {}
-                  },
+              Padding(
+                padding:  EdgeInsets.all((Get.height*0.015)),
+                child: Form(
+                  key: passwordKey,
+                  child: MyTextField(
+                    controller: passwordController,
+                    hintText: "password",
+                    obscureText: true,
+                    prefixIcon: Icon(Icons.lock, size: Get.height * 0.028),
+                    inputType: 'password',
+                    onChanged: (text) {
+                      if (passwordKey.currentState!.validate()) {}
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: Get.height * 0.02),

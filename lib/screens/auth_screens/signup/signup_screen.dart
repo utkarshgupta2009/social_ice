@@ -122,41 +122,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              Form(
-                key: signUpEmailKey,
-                child: MyTextField(
-                  controller: emailController,
-                  hintText: "email",
-                  obscureText: false,
-                  prefixIcon: Icon(Icons.account_circle_rounded,
-                      size: Get.height * 0.028),
-                  inputType: 'email',
-                  onChanged: (text) {
-                    if (signUpEmailKey.currentState!.validate()) {}
-                  },
+              Padding(
+                padding:  EdgeInsets.all(Get.height*0.015),
+                child: Form(
+                  key: signUpEmailKey,
+                  child: MyTextField(
+                    controller: emailController,
+                    hintText: "email",
+                    obscureText: false,
+                    prefixIcon: Icon(Icons.account_circle_rounded,
+                        size: Get.height * 0.028),
+                    inputType: 'email',
+                    onChanged: (text) {
+                      if (signUpEmailKey.currentState!.validate()) {}
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: Get.height * 0.025),
-              MyTextField(
-                controller: usernameController,
-                hintText: "username",
-                obscureText: false,
-                prefixIcon: Icon(Icons.account_circle_rounded,
-                    size: Get.height * 0.028),
+              Padding(
+                padding:  EdgeInsets.all(Get.height*0.015),
+                child: MyTextField(
+                  controller: usernameController,
+                  hintText: "username",
+                  obscureText: false,
+                  prefixIcon: Icon(Icons.account_circle_rounded,
+                      size: Get.height * 0.028),
+                ),
               ),
 
               SizedBox(height: Get.height * 0.025),
-              Form(
-                key: signUpPasswordKey,
-                child: MyTextField(
-                  controller: passwordController,
-                  hintText: "password",
-                  obscureText: true,
-                  prefixIcon: Icon(Icons.lock, size: Get.height * 0.028),
-                  inputType: 'password',
-                  onChanged: (text) {
-                    if (signUpPasswordKey.currentState!.validate()) {}
-                  },
+              Padding(
+                padding:  EdgeInsets.all(Get.height*0.015),
+                child: Form(
+                  key: signUpPasswordKey,
+                  child: MyTextField(
+                    controller: passwordController,
+                    hintText: "password",
+                    obscureText: true,
+                    prefixIcon: Icon(Icons.lock, size: Get.height * 0.028),
+                    inputType: 'password',
+                    onChanged: (text) {
+                      if (signUpPasswordKey.currentState!.validate()) {}
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: Get.height * 0.034),
