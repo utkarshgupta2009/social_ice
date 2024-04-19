@@ -19,7 +19,7 @@ class CachedImage extends StatelessWidget {
             padding: EdgeInsets.all(Get.height*0.01),
             child: CircularProgressIndicator(
               value: progress.progress,
-              color: Colors.black,
+              color: const Color.fromARGB(255, 248, 246, 246),
             ),
           ),
         );

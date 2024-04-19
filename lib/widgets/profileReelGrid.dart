@@ -28,14 +28,14 @@ class ProfileReelGrid extends StatelessWidget {
                   childAspectRatio: 2,
                   mainAxisExtent: Get.height * 0.23,
                   crossAxisCount: 3,
-                  crossAxisSpacing: 3),
-              itemCount: snapshot.data!.docs.length,
+                  crossAxisSpacing: 6),
+              itemCount: snapshot.data?.docs.length,
               itemBuilder: (context, index) {
                 if (!snapshot.hasData) {
                   return CircularProgressIndicator();
                 } else {
                   return profileReelGridItem(
-                    snapshot.data!.docs[index].data(),
+                    snapshot.data?.docs[index].data(),
                     index: index,
                   );
                 }

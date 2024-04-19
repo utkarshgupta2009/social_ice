@@ -50,7 +50,7 @@ class _ReelsItemState extends State<ReelsItem> {
           var visiblePercentage = visibilityInfo.visibleFraction * 100;
           if (mounted) {
             if (controller!.value.isInitialized) {
-              if (visiblePercentage > 50) {
+              if (visiblePercentage >= 50) {
                 controller!.play();
               } else {
                 controller!.seekTo(const Duration(milliseconds: 0));
