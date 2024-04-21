@@ -11,11 +11,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+   PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentPage);
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: PageView(
-        children: const [FeedPage(), MessageScreen()],
+      child: Scaffold(
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+          title: const Text(
+            "SOCIALice",
+            style: TextStyle(
+                color: Color(0xffFF8911), fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  if (_currentPage == 0) {
+                  _pageController.nextPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                }
+                    
+                },
+                icon: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Image.asset('assets/images/chat.png'),
+                ))
+          ],
+        ),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (int page) {
+            setState(() {
+              _currentPage = page;
+            });
+          },
+          children: const [FeedPage(), MessageScreen()],
+        ),
       ),
     );
   }

@@ -28,27 +28,7 @@ class _FeedPageState extends State<FeedPage> {
           },
           child: const Text("Log Out"),
         ),
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-          title: const Text(
-            "SOCIALice",
-            style: TextStyle(
-                color: Color(0xffFF8911), fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  scrollController.animateTo(500,
-                    duration: Duration(seconds: 1), curve: Curves.easeIn);
-                    
-                },
-                icon: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Image.asset('assets/images/chat.png'),
-                ))
-          ],
-        ),
+        
         body: Center(
           child: Column(
             children: [
