@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_ice/models/user_model.dart';
@@ -27,88 +26,74 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
       const ReelsScreen(),
       const ProfileScreenBuilder()
     ];
-    return Stack(
-      children: [
-        IndexedStack(
-          index: bottomNavigatorIndex,
-          children: bottom_navigation_screens_list,
+    return Scaffold(
+      body: IndexedStack(
+        index: bottomNavigatorIndex,
+        children: bottom_navigation_screens_list,
+      ),
+      bottomNavigationBar: Container(
+        width: Get.width,
+        decoration: const BoxDecoration(color: Colors.black),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: Get.width * 0.09, vertical: Get.height * 0.007),
+          child: FutureBuilder(
+              future: controller.getCurrentUserData(),
+              builder: (context, snapshot) {
+                UserModel user = snapshot.data as UserModel;
+                return GNav(
+                    tabBackgroundColor: const Color.fromARGB(54, 158, 158, 158),
+                    gap: 5,
+                    padding: EdgeInsets.all(Get.height * 0.012),
+                    onTabChange: (index) {
+                      setState(() {
+                        bottomNavigatorIndex = index;
+                      });
+                    },
+                    selectedIndex: bottomNavigatorIndex,
+                    tabs: [
+                      GButton(
+                        icon: Icons.home,
+                        text: "Home",
+                        textStyle: TextStyle(
+                            color: const Color(0xffFF8911),
+                            fontWeight: FontWeight.bold,
+                            fontSize: Get.height * 0.017),
+                        iconSize: Get.height * 0.025,
+                        iconActiveColor: const Color(0xffFF8911),
+                        iconColor: const Color.fromARGB(255, 241, 219, 187),
+                      ),
+                      GButton(
+                        icon: Icons.video_library,
+                        text: "Reels",
+                        textStyle: TextStyle(
+                            color: const Color(0xffFF8911),
+                            fontWeight: FontWeight.bold,
+                            fontSize: Get.height * 0.017),
+                        iconSize: Get.height * 0.025,
+                        iconActiveColor: const Color(0xffFF8911),
+                        iconColor: const Color.fromARGB(255, 241, 219, 187),
+                      ),
+                      GButton(
+                        icon: Icons.account_circle_sharp,
+                        leading: ClipOval(
+                            child: SizedBox(
+                                height: Get.height * 0.028,
+                                width: Get.height * 0.028,
+                                child: CachedImage(user.profilePicUrl))),
+                        text: "Profile",
+                        textStyle: TextStyle(
+                            color: const Color(0xffFF8911),
+                            fontWeight: FontWeight.bold,
+                            fontSize: Get.height * 0.017),
+                        iconSize: Get.height * 0.025,
+                        iconActiveColor: const Color(0xffFF8911),
+                        iconColor: const Color.fromARGB(255, 241, 219, 187),
+                      ),
+                    ]);
+              }),
         ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-            width: Get.width,
-            decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(blurRadius: 10, color: Color.fromARGB(145, 0, 0, 0),
-                spreadRadius: 17,
-               ),
-                BoxShadow(blurRadius: 4, color: Color.fromARGB(175, 0, 0, 0),
-                spreadRadius: 5,
-               ),
-               
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.09, vertical: Get.height * 0.007),
-              child: FutureBuilder(
-                  future: controller.getCurrentUserData(),
-                  builder: (context, snapshot) {
-                    UserModel user = snapshot.data as UserModel;
-                    return GNav(
-                        gap: 5,
-                        padding: EdgeInsets.all(Get.height * 0.012),
-                        onTabChange: (index) {
-                          setState(() {
-                            bottomNavigatorIndex = index;
-                          });
-                        },
-                        selectedIndex: bottomNavigatorIndex,
-                        tabs: [
-                          GButton(
-                            icon: Icons.home,
-                            text: "Home",
-                            textStyle: TextStyle(
-                                color: const Color(0xffFF8911),
-                                fontWeight: FontWeight.bold,
-                                fontSize: Get.height * 0.017),
-                            iconSize: Get.height * 0.025,
-                            iconActiveColor: const Color(0xffFF8911),
-                            iconColor: const Color.fromARGB(255, 241, 219, 187),
-                          ),
-                          GButton(
-                            icon: Icons.video_library,
-                            text: "Reels",
-                            textStyle: TextStyle(
-                                color: const Color(0xffFF8911),
-                                fontWeight: FontWeight.bold,
-                                fontSize: Get.height * 0.017),
-                            iconSize: Get.height * 0.025,
-                            iconActiveColor: const Color(0xffFF8911),
-                            iconColor: const Color.fromARGB(255, 241, 219, 187),
-                          ),
-                          GButton(
-                            icon: Icons.account_circle_sharp,
-                            leading: ClipOval(
-                                child: SizedBox(
-                                    height: Get.height * 0.028,
-                                    width: Get.height * 0.028,
-                                    child: CachedImage(user.profilePicUrl))),
-                            text: "Profile",
-                            textStyle: TextStyle(
-                                color: const Color(0xffFF8911),
-                                fontWeight: FontWeight.bold,
-                                fontSize: Get.height * 0.017),
-                            iconSize: Get.height * 0.025,
-                            iconActiveColor: const Color(0xffFF8911),
-                            iconColor: const Color.fromARGB(255, 241, 219, 187),
-                          ),
-                        ]);
-                  }),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

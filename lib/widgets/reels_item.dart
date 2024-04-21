@@ -1,6 +1,6 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -17,6 +17,7 @@ class _ReelsItemState extends State<ReelsItem> {
   VideoPlayerController? controller;
   bool play = true;
   bool isPlayingNotifier = false;
+  final reelController = Get.put(ReelController());
 
   @override
   void initState() {
@@ -28,7 +29,6 @@ class _ReelsItemState extends State<ReelsItem> {
         setState(() {
           controller!.setLooping(true);
           controller!.setVolume(1);
-
           //controller!.play();
         });
       });
@@ -43,6 +43,9 @@ class _ReelsItemState extends State<ReelsItem> {
 
   @override
   Widget build(BuildContext context) {
+    final int captionWordCount =
+        widget.snapshot['caption'].toString().split(" ").length;
+
     return Scaffold(
       body: VisibilityDetector(
         key: Key(widget.snapshot["videoUrl"]),
@@ -73,7 +76,13 @@ class _ReelsItemState extends State<ReelsItem> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  play = !play;
+                  if ((reelController.isCaptionTapped.value && play) ||
+                      (reelController.isCaptionTapped.value && !play)) {
+                    reelController.isCaptionTapped.value =
+                        !reelController.isCaptionTapped.value;
+                  } else {
+                    play = !play;
+                  }
                 });
                 if (play) {
                   controller!.play();
@@ -81,13 +90,27 @@ class _ReelsItemState extends State<ReelsItem> {
                   controller!.pause();
                 }
               },
+              onLongPress: () {
+                setState(() {
+                  if (play) {
+                    play = !play;
+                    controller!.pause();
+                  }
+                });
+              },
+              onLongPressUp: () {
+                setState(() {
+                  play = !play;
+                  controller!.play();
+                });
+              },
               child: Container(
                 color: Colors.black,
                 width: double.infinity,
-                height:double.infinity,
+                height: double.infinity,
                 child: Center(
-                  child: Container(
-                    height: Get.height,
+                  child: SizedBox(
+                    height: double.infinity,
                     child: SizedBox(
                       height: controller!.value.size.height,
                       child: VideoPlayer(controller!),
@@ -112,15 +135,12 @@ class _ReelsItemState extends State<ReelsItem> {
                 top: Get.height * 0.55,
                 left: Get.width * 0.85,
                 child: Container(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
+                  decoration: const BoxDecoration(boxShadow: [
+                    BoxShadow(
                         color: Color.fromARGB(45, 0, 0, 0),
                         blurRadius: 25,
-                        blurStyle: BlurStyle.normal
-                      )
-                    ]
-                  ),
+                        blurStyle: BlurStyle.normal)
+                  ]),
                   child: Column(children: [
                     IconButton(
                       onPressed: () {},
@@ -165,18 +185,17 @@ class _ReelsItemState extends State<ReelsItem> {
                   ]),
                 )),
             Positioned(
-              bottom: Get.height * 0.08,
-              left: Get.width*0.03,
-              right: Get.width*0.13,
+              bottom: 3,
+              left: Get.width * 0.03,
+              right: Get.width * 0.03,
               child: Container(
-                decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(88, 0, 0, 0),
-                        blurRadius: 30,
-                        blurStyle: BlurStyle.normal,
-                        spreadRadius: 30
-                      )]),
+                decoration: const BoxDecoration(boxShadow: [
+                  BoxShadow(
+                      color: Color.fromARGB(88, 0, 0, 0),
+                      blurRadius: 30,
+                      blurStyle: BlurStyle.normal,
+                      spreadRadius: 30)
+                ]),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -186,8 +205,8 @@ class _ReelsItemState extends State<ReelsItem> {
                           child: SizedBox(
                             height: Get.height * 0.05,
                             width: Get.height * 0.05,
-                            child:
-                                CachedImage(widget.snapshot['userProfileImageUrl']),
+                            child: CachedImage(
+                                widget.snapshot['userProfileImageUrl']),
                           ),
                         ),
                         SizedBox(width: Get.width * 0.03),
@@ -203,20 +222,60 @@ class _ReelsItemState extends State<ReelsItem> {
                       ],
                     ),
                     SizedBox(height: Get.height * 0.015),
-                    ExpandableText(
-                      widget.snapshot['caption'],
-                      style: TextStyle(
-                        fontSize: Get.pixelRatio * 6,
-                        color: Colors.white,
-                      ), expandText: 'more',
-                     collapseOnTextTap: true,
-                     expandOnTextTap: true,
-                     animation: true,
-                     animationDuration: Durations.medium3,
-                     animationCurve: Curves.easeIn,
-                      
-                     
-                    ),
+                    Obx(() {
+                      if (reelController.isCaptionTapped.isTrue) {
+                        return GestureDetector(
+                            onTap: () =>
+                                reelController.isCaptionTapped.value = false,
+                            child: captionWordCount > 95
+                                ? AnimatedContainer(
+                                    duration: Durations.extralong1,
+                                    curve: Curves.easeIn,
+                                    height: Get.height * 0.4,
+                                    width: Get.width * 0.8,
+                                    child: ListView(
+                                      children: [
+                                        Text(
+                                          widget.snapshot['caption'],
+                                          style: TextStyle(
+                                            fontSize: Get.pixelRatio * 6,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: Get.width * 0.8,
+                                    child: Text(
+                                      widget.snapshot['caption'],
+                                      style: TextStyle(
+                                        fontSize: Get.pixelRatio * 6,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ));
+                      } else {
+                        return GestureDetector(
+                          onTap: () {
+                            if (captionWordCount > 20) {
+                              reelController.isCaptionTapped.value = true;
+                            }
+                          },
+                          child: SizedBox(
+                            width: Get.width * 0.8,
+                            child: Text(
+                              widget.snapshot['caption'],
+                              maxLines: 2,
+                              style: TextStyle(
+                                fontSize: Get.pixelRatio * 6,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    })
                   ],
                 ),
               ),

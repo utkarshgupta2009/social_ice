@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
+import 'package:social_ice/screens/Bottom_navigation_screens/home_screen/home_screen_controller.dart';
 import 'package:social_ice/screens/auth_screens/login/login_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/my_text_field.dart';
@@ -17,9 +18,35 @@ class _FeedPageState extends State<FeedPage> {
   ScrollController scrollController = ScrollController();
   bool isSearching = false;
   TextEditingController searchController = TextEditingController();
+  final controller = Get.put(HomeScreenController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+          title: const Text(
+            "SOCIALice",
+            style: TextStyle(
+                color: Color(0xffFF8911), fontWeight: FontWeight.bold),
+          ),
+          actions: [
+             IconButton(
+                onPressed: () {
+                  if (controller.currentPage == 0) {
+                    controller.pageController.value.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                icon: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Image.asset('assets/images/chat.png'),
+                ))
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             FirebaseServices.auth.signOut();
@@ -28,7 +55,6 @@ class _FeedPageState extends State<FeedPage> {
           },
           child: const Text("Log Out"),
         ),
-        
         body: Center(
           child: Column(
             children: [
@@ -48,7 +74,7 @@ class _FeedPageState extends State<FeedPage> {
               ),
               Expanded(
                   child: ListView.builder(
-                    controller: scrollController,
+                      controller: scrollController,
                       shrinkWrap: true,
                       itemCount: 10,
                       itemBuilder: (context, index) {
