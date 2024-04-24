@@ -60,12 +60,13 @@ class _MyTextFieldState extends State<MyTextField> {
       maxLines: 1,
       controller: widget.controller,
       decoration: InputDecoration(
+        
         focusedErrorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red, width: 2.0),
             borderRadius: BorderRadius.circular(10)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         isDense: true,
-        fillColor: Colors.white,
+        fillColor: Color.fromARGB(255, 240, 237, 234),
         filled: true,
         prefixIcon: widget.prefixIcon,
         prefixIconColor: const Color(0xffFF8911),

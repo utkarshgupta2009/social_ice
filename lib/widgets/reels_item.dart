@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/profile_screen_ui.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
+import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ReelsItem extends StatefulWidget {
-  final snapshot;
+  final Map<String,dynamic> snapshot;
   ReelsItem(this.snapshot, {super.key});
 
   @override
@@ -199,27 +201,36 @@ class _ReelsItemState extends State<ReelsItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        ClipOval(
-                          child: SizedBox(
-                            height: Get.height * 0.05,
-                            width: Get.height * 0.05,
-                            child: CachedImage(
-                                widget.snapshot['userProfileImageUrl']),
+                    GestureDetector(
+                      onTap: () async {
+                        final snapshot = await FirebaseServices.firestore
+                            .collection("users")
+                            .doc(widget.snapshot["userId"])
+                            .get();
+                        Get.to(ProfileScreen(snapshot: snapshot));
+                      },
+                      child: Row(
+                        children: [
+                          ClipOval(
+                            child: SizedBox(
+                              height: Get.height * 0.05,
+                              width: Get.height * 0.05,
+                              child: CachedImage(
+                                  widget.snapshot['userProfileImageUrl']),
+                            ),
                           ),
-                        ),
-                        SizedBox(width: Get.width * 0.03),
-                        Text(
-                          "@${widget.snapshot['username']}",
-                          style: TextStyle(
-                            fontSize: Get.pixelRatio * 6,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(width: Get.width * 0.03),
+                          Text(
+                            "@${widget.snapshot['username']}",
+                            style: TextStyle(
+                              fontSize: Get.pixelRatio * 6,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: Get.width * 0.03),
-                      ],
+                          SizedBox(width: Get.width * 0.03),
+                        ],
+                      ),
                     ),
                     SizedBox(height: Get.height * 0.015),
                     Obx(() {

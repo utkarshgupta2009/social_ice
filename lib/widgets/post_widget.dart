@@ -10,11 +10,10 @@ class PostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.all(Get.height*0.01),
+      padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
       child: Container(
-        padding: EdgeInsets.all(Get.height*0.018),
+        //padding: EdgeInsets.all(Get.height * 0.018),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 251, 226, 201),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
@@ -36,10 +35,8 @@ class PostWidget extends StatelessWidget {
             SizedBox(height: 10.0),
             Container(
               clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20)
-                
-              ),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: Image.network(
                 post.imageUrl ?? "",
                 height: Get.height * 0.4, // Adjust as per your requirement

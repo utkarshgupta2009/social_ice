@@ -72,6 +72,7 @@ class _FeedPageState extends State<FeedPage> {
                       size: Get.height * 0.035,
                     )),
               ),
+              
               Expanded(
                   child: ListView.builder(
                       controller: scrollController,
