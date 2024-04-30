@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/profile_screen_ui.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
@@ -8,8 +9,8 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ReelsItem extends StatefulWidget {
-  final Map<String,dynamic> snapshot;
-  ReelsItem(this.snapshot, {super.key});
+  final VideoInformationModel videoData;
+  ReelsItem(this.videoData, {super.key});
 
   @override
   State<ReelsItem> createState() => _ReelsItemState();
@@ -26,7 +27,9 @@ class _ReelsItemState extends State<ReelsItem> {
     // TODO: implement initState
     super.initState();
     // ignore: deprecated_member_use
-    controller = VideoPlayerController.network(widget.snapshot['videoUrl'])
+   // final String path = widget.videoData.videoUrl[]
+    Uri uri = Uri.parse(widget.videoData.videoUrl.toString());
+    controller = VideoPlayerController.networkUrl(uri)
       ..initialize().then((value) {
         setState(() {
           controller!.setLooping(true);
@@ -46,11 +49,11 @@ class _ReelsItemState extends State<ReelsItem> {
   @override
   Widget build(BuildContext context) {
     final int captionWordCount =
-        widget.snapshot['caption'].toString().split(" ").length;
+        widget.videoData.caption.toString().split(" ").length;
 
     return Scaffold(
       body: VisibilityDetector(
-        key: Key(widget.snapshot["videoUrl"]),
+        key: Key(widget.videoData.videoUrl.toString()),
         onVisibilityChanged: (visibilityInfo) {
           var visiblePercentage = visibilityInfo.visibleFraction * 100;
           if (mounted) {
@@ -153,7 +156,7 @@ class _ReelsItemState extends State<ReelsItem> {
                       ),
                     ),
                     Text(
-                      widget.snapshot["totalLikes"].toString(),
+                      widget.videoData.totalLikes.toString(),
                       style: TextStyle(
                         fontSize: Get.pixelRatio * 6,
                         color: Colors.white,
@@ -169,7 +172,7 @@ class _ReelsItemState extends State<ReelsItem> {
                       ),
                     ),
                     Text(
-                      widget.snapshot["totalComments"].toString(),
+                      widget.videoData.totalComments.toString(),
                       style: TextStyle(
                         fontSize: Get.pixelRatio * 6,
                         color: Colors.white,
@@ -203,11 +206,9 @@ class _ReelsItemState extends State<ReelsItem> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        final snapshot = await FirebaseServices.firestore
-                            .collection("users")
-                            .doc(widget.snapshot["userId"])
-                            .get();
-                        Get.to(ProfileScreen(snapshot: snapshot));
+                        final userData = await FirebaseServices()
+                            .getUserDetails(widget.videoData.userId.toString());
+                        Get.to(ProfileScreen(userData: userData));
                       },
                       child: Row(
                         children: [
@@ -216,12 +217,12 @@ class _ReelsItemState extends State<ReelsItem> {
                               height: Get.height * 0.05,
                               width: Get.height * 0.05,
                               child: CachedImage(
-                                  widget.snapshot['userProfileImageUrl']),
+                                  widget.videoData.userProfileImageUrl),
                             ),
                           ),
                           SizedBox(width: Get.width * 0.03),
                           Text(
-                            "@${widget.snapshot['username']}",
+                            "@${widget.videoData.username}",
                             style: TextStyle(
                               fontSize: Get.pixelRatio * 6,
                               color: Colors.white,
@@ -247,7 +248,7 @@ class _ReelsItemState extends State<ReelsItem> {
                                     child: ListView(
                                       children: [
                                         Text(
-                                          widget.snapshot['caption'],
+                                          widget.videoData.caption.toString(),
                                           style: TextStyle(
                                             fontSize: Get.pixelRatio * 6,
                                             color: Colors.white,
@@ -259,7 +260,7 @@ class _ReelsItemState extends State<ReelsItem> {
                                 : SizedBox(
                                     width: Get.width * 0.8,
                                     child: Text(
-                                      widget.snapshot['caption'],
+                                      widget.videoData.caption.toString(),
                                       style: TextStyle(
                                         fontSize: Get.pixelRatio * 6,
                                         color: Colors.white,
@@ -276,7 +277,7 @@ class _ReelsItemState extends State<ReelsItem> {
                           child: SizedBox(
                             width: Get.width * 0.8,
                             child: Text(
-                              widget.snapshot['caption'],
+                              widget.videoData.caption.toString(),
                               maxLines: 2,
                               style: TextStyle(
                                 fontSize: Get.pixelRatio * 6,

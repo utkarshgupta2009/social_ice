@@ -5,15 +5,15 @@ import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/profileReelGridItem.dart';
 
 class ProfileReelGrid extends StatelessWidget {
-  final snapshot;
-  const ProfileReelGrid({super.key, required this.snapshot});
+  final userId;
+  const ProfileReelGrid({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseServices.firestore
             .collection("users")
-            .doc(snapshot["uid"])
+            .doc(userId)
             .collection("videos").orderBy("publishesDateTime", descending: true)
             .snapshots(),
         builder: (context, snapshot) {

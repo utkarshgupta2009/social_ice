@@ -75,6 +75,7 @@ class _FeedPageState extends State<FeedPage> {
               
               Expanded(
                   child: ListView.builder(
+                    
                       controller: scrollController,
                       shrinkWrap: true,
                       itemCount: 10,

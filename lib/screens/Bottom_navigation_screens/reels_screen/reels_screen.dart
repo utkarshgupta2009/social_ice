@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/reels_item.dart';
@@ -29,15 +30,14 @@ class _ReelScreenState extends State<ReelsScreen> {
                 )
               : PreloadPageView.builder(
                   preloadPagesCount: 5,
-                  physics: const BouncingScrollPhysics(),
+                  physics: ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   controller: PreloadPageController(
                     initialPage: 0,
                     viewportFraction: 1,
                   ),
                   onPageChanged: (value) {
-                    reelsController.isCaptionTapped.value =
-                        false;
+                    reelsController.isCaptionTapped.value = false;
                   },
                   itemCount:
                       snapshot.data == null ? 0 : snapshot.data!.docs.length,
@@ -45,7 +45,18 @@ class _ReelScreenState extends State<ReelsScreen> {
                     if (!snapshot.hasData) {
                       return const CircularProgressIndicator();
                     }
-                    return ReelsItem(snapshot.data!.docs[index].data());
+                    final String videoId =
+                        snapshot.data!.docs[index].data()["videoId"].toString();
+                    final String userId =
+                        snapshot.data!.docs[index].data()["userId"].toString();
+                    return FutureBuilder(
+                        future:
+                            FirebaseServices().getVideoDetails(userId, videoId),
+                        builder: (context, snapshot) {
+                          
+                          return ReelsItem(
+                              snapshot.data as VideoInformationModel);
+                        });
                   },
                 );
         },

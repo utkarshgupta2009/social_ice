@@ -34,10 +34,9 @@ class FirebaseServices {
 
       UserModel newUser = UserModel(
         uid: auth.currentUser!.uid,
-        name: "sai",
+        name: "johnDoe",
         username: userName,
         profilePicUrl: profilePicUrl,
-        role: "buyer",
         userEmail: userEmail,
       );
 
@@ -89,6 +88,20 @@ class FirebaseServices {
 
     final userData = snapshot.docs.map((e) => UserModel.fromSnap(e)).single;
     return userData;
+  }
+
+  Future<VideoInformationModel> getVideoDetails(
+      String userId, String videoId) async {
+    final snapshot = await firestore
+        .collection("reels")
+        .where("videoId", isEqualTo: videoId)
+        .get();
+
+    final VideoInformationModel videoData = snapshot.docs
+        .map((e) => VideoInformationModel.fromDocumentSnapshot(e))
+        .single;
+
+    return videoData;
   }
 
   uploadVideoToFirestoreDatabase(String videoId, String videoPath) async {
@@ -198,6 +211,69 @@ class FirebaseServices {
       Get.snackbar("Success", "Profile updated successfully!!");
     } catch (error) {
       Get.snackbar("Error", "Please try again");
+    }
+  }
+
+  void followUser(UserModel followUserData) async {
+    try {
+      UserModel currentUserData =
+          await getUserDetails(auth.currentUser?.uid as String);
+
+      await firestore
+          .collection("users")
+          .doc(auth.currentUser?.uid)
+          .collection("following")
+          .doc(followUserData.uid)
+          .set(followUserData.toJson());
+
+      await firestore
+          .collection('users')
+          .doc(followUserData.uid)
+          .collection('followers')
+          .doc(currentUserData.uid)
+          .set(currentUserData.toJson());
+      Get.snackbar("Followed", followUserData.username.toString());
+    } catch (expection) {
+      Get.snackbar("Error", expection.toString());
+    }
+  }
+
+  Future<void> unfollowUser(UserModel targetUserData) async {
+    try {
+      // Remove the target user from the current user's following sub-collection
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser?.uid)
+          .collection('following')
+          .doc(targetUserData.uid)
+          .delete();
+
+      // Remove the current user from the target user's followers sub-collection
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(targetUserData.uid)
+          .collection('followers')
+          .doc(auth.currentUser?.uid)
+          .delete();
+
+      Get.snackbar("Unfollowed", targetUserData.username.toString());
+    } catch (expection) {
+      Get.snackbar("Error", expection.toString());
+    }
+  }
+
+  Future<bool> checkIfFollowing(String targetUserId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('following')
+        .doc(targetUserId)
+        .get();
+
+    if (snapshot.exists) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

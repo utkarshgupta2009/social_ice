@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   String? username;
   String? name;
-  String? role;
+  
   String? uid;
   String? profilePicUrl;
   String? userEmail;
@@ -13,7 +13,7 @@ class UserModel {
       this.name,
       this.username,
       this.profilePicUrl,
-      this.role,
+      
       this.userEmail});
 
   Map<String, dynamic> toJson() => {
@@ -22,7 +22,7 @@ class UserModel {
         "username": username,
         "userEmail": userEmail,
         "image": profilePicUrl,
-        "role": role,
+        
       };
 
   static UserModel fromSnap(DocumentSnapshot<Map<String,dynamic>> document) {
@@ -33,7 +33,7 @@ class UserModel {
       username: dataSnapshot["username"],
       userEmail: dataSnapshot["userEmail"],
       profilePicUrl: dataSnapshot["image"],
-      role: dataSnapshot["role"],
+      
     );
   }
 }

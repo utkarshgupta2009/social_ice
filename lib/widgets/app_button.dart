@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
+// ignore: must_be_immutable
 class AppButton extends StatelessWidget {
   final dynamic onPressed;
   final String buttonLabel;

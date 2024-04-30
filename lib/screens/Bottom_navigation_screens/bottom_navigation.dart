@@ -6,6 +6,7 @@ import 'package:social_ice/screens/Bottom_navigation_screens/home_screen/home_sc
 import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/user_profile_controller.dart';
 import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reels_screen.dart';
+import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 
 class BottomNavigatorScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
     List<Widget> bottom_navigation_screens_list = [
       const HomeScreen(),
       const ReelsScreen(),
-      const ProfileScreenBuilder()
+       ProfileScreenBuilder(uid: FirebaseServices.auth.currentUser?.uid as String)
     ];
     return Scaffold(
       body: IndexedStack(
