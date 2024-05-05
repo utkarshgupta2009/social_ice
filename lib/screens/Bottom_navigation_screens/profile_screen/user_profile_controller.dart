@@ -10,5 +10,7 @@ class userProfileController extends GetxController {
     final uid = FirebaseServices.auth.currentUser!.uid;
     return FirebaseServices().getUserDetails(uid);
   }
+
   RxBool isFollowed = false.obs;
+  
 }

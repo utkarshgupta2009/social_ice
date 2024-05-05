@@ -76,12 +76,15 @@ class _ScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
-              AppButton(
-                  onPressed: () {
-                    FirebaseServices().LoginUserWithEmailAndPassword(
-                        emailController.text.trim(), passwordController.text);
-                  },
-                  buttonLabel: "Login"),
+              SizedBox(
+                width: Get.width*0.5,
+                child: AppButton(
+                    onPressed: () {
+                      FirebaseServices().LoginUserWithEmailAndPassword(
+                          emailController.text.trim(), passwordController.text);
+                    },
+                    buttonLabel: "Login"),
+              ),
               Padding(
                 padding: EdgeInsets.only(top: Get.height * 0.04),
                 child: const Text(

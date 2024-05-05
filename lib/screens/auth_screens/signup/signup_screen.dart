@@ -23,6 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   final signupController = Get.put(SignupController());
   final uploadController = Get.put(UploadMediaController());
 
@@ -154,6 +155,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: Get.height * 0.025),
               Padding(
                 padding:  EdgeInsets.all(Get.height*0.015),
+                child: MyTextField(
+                  controller: nameController,
+                  hintText: "name",
+                  obscureText: false,
+                  prefixIcon: Icon(Icons.person_2_rounded,
+                      size: Get.height * 0.028),
+                ),
+              ),
+
+              SizedBox(height: Get.height * 0.025),
+              Padding(
+                padding:  EdgeInsets.all(Get.height*0.015),
                 child: Form(
                   key: signUpPasswordKey,
                   child: MyTextField(
@@ -169,49 +182,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(height: Get.height * 0.034),
-              AppButton(
-                  onPressed: () {
-                    if (uploadController.selectedImagePath.isNotEmpty &&
-                        emailController.text.isNotEmpty &&
-                        usernameController.text.isNotEmpty &&
-                        passwordController.text.isNotEmpty) {
-                      signupController.signupButtonTapped = true.obs;
-
-                      Get.defaultDialog(
-                          titlePadding: const EdgeInsets.all(20),
-                          contentPadding: const EdgeInsets.all(20),
-                          middleText: " Kindly wait",
-                          title: "Creating account",
-                          titleStyle: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                          actions: [
-                            const CircularProgressIndicator(),
-                          ]);
-                      FirebaseServices().createAccountWithEmailAndPassword(
-                        emailController.text.trim(),
-                        passwordController.text.trim(),
-                        usernameController.text.trim(),
-                        File(uploadController.selectedImagePath.value),
-                      );
-                    } else {
-                      Get.defaultDialog(
-                          titlePadding: const EdgeInsets.all(20),
-                          contentPadding: const EdgeInsets.all(20),
-                          middleText:
-                              " Kindly fill all the fields correctly and check that you have selected a profile image",
-                          title: "Sign up unsuccessfull",
-                          titleStyle: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                          confirm: AppButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              buttonLabel: "try again"));
-                    }
-                  },
-                  buttonLabel: signupController.signupButtonTapped == true.obs
-                      ? "Loading"
-                      : "Sign up"),
+              SizedBox(
+                width: Get.width*0.5,
+                child: AppButton(
+                    onPressed: () {
+                      if (uploadController.selectedImagePath.isNotEmpty &&
+                          emailController.text.isNotEmpty &&
+                          usernameController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty && nameController.text.isNotEmpty) {
+                        signupController.signupButtonTapped = true.obs;
+                
+                        Get.defaultDialog(
+                            titlePadding: const EdgeInsets.all(20),
+                            contentPadding: const EdgeInsets.all(20),
+                            middleText: " Kindly wait",
+                            title: "Creating account",
+                            titleStyle: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            actions: [
+                              const CircularProgressIndicator(),
+                            ]);
+                        FirebaseServices().createAccountWithEmailAndPassword(
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                          usernameController.text.trim(),
+                          nameController.text,
+                          File(uploadController.selectedImagePath.value),
+                        );
+                      } else {
+                        Get.defaultDialog(
+                            titlePadding: const EdgeInsets.all(20),
+                            contentPadding: const EdgeInsets.all(20),
+                            middleText:
+                                " Kindly fill all the fields correctly and check that you have selected a profile image",
+                            title: "Sign up unsuccessfull",
+                            titleStyle: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            confirm: AppButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                buttonLabel: "try again"));
+                      }
+                    },
+                    buttonLabel: signupController.signupButtonTapped == true.obs
+                        ? "Loading"
+                        : "Sign up"),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
                 child: Row(

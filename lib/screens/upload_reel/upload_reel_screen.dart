@@ -43,7 +43,7 @@ class _UploadReelScreenState extends State<UploadReelScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController captionController = TextEditingController();
-    print(uploadController.selectedVideoPath.value);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -56,11 +56,16 @@ class _UploadReelScreenState extends State<UploadReelScreen> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: VideoPlayer(playerController!)),
-            MyTextField(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
+              child: MyTextField(
                 controller: captionController,
                 hintText: "add a caption",
                 obscureText: false,
-                prefixIcon: const Icon(Icons.closed_caption)),
+                prefixIcon: const Icon(Icons.closed_caption),
+               
+              ),
+            ),
             AppButton(
                 onPressed: () {
                   if (captionController.text.isNotEmpty) {

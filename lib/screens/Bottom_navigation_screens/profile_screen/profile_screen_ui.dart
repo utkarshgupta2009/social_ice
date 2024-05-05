@@ -140,30 +140,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 flex: 1,
                                 child: SizedBox(
                                     width: Get.width * 0.5,
-                                    child: FutureBuilder(
-                                        future: FirebaseServices()
-                                            .checkIfFollowing(
-                                                widget.userData.uid as String),
-                                        builder: (context, snapshot) {
-                                          return AppButton(
-                                            onPressed: () async {
-                                              setState(() {
-                                                if (snapshot.data == true) {
-                                                FirebaseServices().unfollowUser(
-                                                    widget.userData);
-                                              } else {
-                                                FirebaseServices().followUser(
-                                                    widget.userData);
-                                              }
-                                              });
-                                            },
-                                            buttonLabel: snapshot.data == false
-                                                ? "Follow"
-                                                : "Unfollow",
-                                            color: Colors.white,
-                                            textColor: Colors.black,
-                                          );
-                                        }))),
+                                    child: AppButton(
+                                      onPressed: () async {
+                                        FirebaseServices().followUser(
+                                            widget.userData.uid as String);
+                                      },
+                                      buttonLabel: "Follow",
+                                      color: Colors.white,
+                                      textColor: Colors.black,
+                                    ))),
                             Flexible(
                                 flex: 1,
                                 child: SizedBox(
