@@ -17,7 +17,17 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-              body: FutureBuilder(
+        appBar: AppBar(
+          title: const Text(
+            "Messages",
+            style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontWeight: FontWeight.bold),
+          ),
+          automaticallyImplyLeading: false,
+          forceMaterialTransparency: true,
+        ),
+        body: FutureBuilder(
             future: profilecontroller.getCurrentUserData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {

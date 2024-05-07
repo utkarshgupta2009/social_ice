@@ -76,7 +76,7 @@ class _UploadReelScreenState extends State<UploadReelScreen> {
                         titleStyle: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                         actions: [CircularProgressIndicator()]);
-                    FirebaseServices().saveVideoInformationToFireStoreDatabase(
+                    FirebaseServices().saveReelInformationToFireStoreDatabase(
                         uploadController.selectedVideoPath.toString(),
                         captionController.text);
                     setState(() {

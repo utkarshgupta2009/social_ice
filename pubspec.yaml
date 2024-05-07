@@ -25,8 +25,9 @@ dependencies:
   preload_page_view: ^0.2.0
   visibility_detector: ^0.4.0+2
   string_validator: ^1.0.2
-  expandable_text: ^2.3.0
-  contained_tab_bar_view: ^0.8.0
+  photo_gallery: ^2.2.1
+  transparent_image: ^2.0.1
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:

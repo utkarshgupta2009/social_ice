@@ -19,6 +19,7 @@ class UploadMediaController extends GetxController {
   }
 
   void getVideo(ImageSource imageSource) async {
+    
     final pickedFile = await ImagePicker().pickVideo(source: imageSource);
     if (pickedFile != null) {
       selectedVideoPath.value = pickedFile.path;

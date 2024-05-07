@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/models/user_model.dart';
 import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/bottom_navigation.dart';
@@ -28,7 +29,8 @@ class FirebaseServices {
 
       //step 2 -> uploading profile pic to database and fetching the url of profile pic for storing in user details
 
-      String profilePicUrl = await uploadImageToFirebaseStorage(profileImage);
+      String profilePicUrl = await uploadImageToFirebaseStorage(
+          profileImage, "Users Profile Images");
 
       //step 3 -> add user details to firestore
 
@@ -53,11 +55,10 @@ class FirebaseServices {
     }
   }
 
-  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
-    Reference reference = storage
-        .ref()
-        .child("Users Profile Images")
-        .child(auth.currentUser!.uid);
+  Future<String> uploadImageToFirebaseStorage(
+      File imageFile, String child) async {
+    Reference reference =
+        storage.ref().child(child).child(auth.currentUser!.uid);
 
     UploadTask uploadTask = reference.putFile(imageFile);
 
@@ -141,8 +142,7 @@ class FirebaseServices {
     }
   }
 
-  saveVideoInformationToFireStoreDatabase(
-      videoPath, String videoCaption) async {
+  saveReelInformationToFireStoreDatabase(videoPath, String videoCaption) async {
     try {
       Get.back();
       Get.back();
@@ -159,7 +159,7 @@ class FirebaseServices {
       //upload thumbnail to storage
       String thumbnailDownloadUrl =
           await uploadVideoThumbnailToFirestoreDatabase(videoId, videoPath);
-     String publishesDateTime = DateTime.now().toString();
+      String publishesDateTime = DateTime.now().toString();
 
       VideoInformationModel videoObject = VideoInformationModel(
         userId: userData.uid,
@@ -179,9 +179,7 @@ class FirebaseServices {
           .doc(userData.uid)
           .collection("reels")
           .doc(videoId)
-          .set({
-            "postedAt": publishesDateTime
-          });
+          .set({"postedAt": publishesDateTime});
 
       await firestore
           .collection("reels")
@@ -271,5 +269,50 @@ class FirebaseServices {
         .get();
 
     return snapshot.exists;
+  }
+
+  saveImagePostInformationToFireStoreDatabase(
+      imagePath, String imageCaption) async {
+    try {
+      Get.back();
+      Get.back();
+      Get.snackbar("image upload in progress",
+          "you will get a confirmation when video is uploaded");
+
+      UserModel userData =
+          await getUserDetails(FirebaseServices.auth.currentUser!.uid);
+      String? imageId = auth.currentUser!.uid +
+          DateTime.now().millisecondsSinceEpoch.toString();
+      //upload video to storage
+      String imageDownloadUrl = await uploadImageToFirebaseStorage(
+          File(imagePath), "All Photo Files");
+      //upload thumbnail to storage
+
+      String publishesDateTime = DateTime.now().toString();
+
+      PostModel imagePostObject = PostModel(
+        userId: userData.uid,
+        username: userData.username,
+        userProfileImageUrl: userData.profilePicUrl,
+        postId: imageId,
+        imageUrl: imageDownloadUrl,
+        totalLikes: 0,
+        totalComments: 0,
+        caption: imageCaption,
+        publishesDateTime: publishesDateTime,
+      );
+
+      await firestore
+          .collection("users")
+          .doc(userData.uid)
+          .collection("images")
+          .doc(imageId)
+          .set(imagePostObject.toJson());
+
+      Get.snackbar("image uploaded", "you have successfully shared your video");
+    } catch (error) {
+      Get.snackbar("Image upload unsuccessfull", error.toString());
+      //Get.off(UserProfileScreen());
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_ice/models/user_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/new_post_screen.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/reels_screen/reels_screen.dart';
@@ -25,7 +26,9 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
     List<Widget> bottom_navigation_screens_list = [
       const HomeScreen(),
       const ReelsScreen(),
-       ProfileScreenBuilder(uid: FirebaseServices.auth.currentUser?.uid as String)
+       NewPostScreen(),
+      ProfileScreenBuilder(
+          uid: FirebaseServices.auth.currentUser?.uid as String)
     ];
     return Scaffold(
       body: IndexedStack(
@@ -47,6 +50,7 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
                     gap: 5,
                     padding: EdgeInsets.all(Get.height * 0.012),
                     onTabChange: (index) {
+                      
                       setState(() {
                         bottomNavigatorIndex = index;
                       });
@@ -67,6 +71,17 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
                       GButton(
                         icon: Icons.video_library,
                         text: "Reels",
+                        textStyle: TextStyle(
+                            color: const Color(0xffFF8911),
+                            fontWeight: FontWeight.bold,
+                            fontSize: Get.height * 0.017),
+                        iconSize: Get.height * 0.025,
+                        iconActiveColor: const Color(0xffFF8911),
+                        iconColor: const Color.fromARGB(255, 241, 219, 187),
+                      ),
+                      GButton(
+                        icon: Icons.add_a_photo_rounded,
+                        text: "New",
                         textStyle: TextStyle(
                             color: const Color(0xffFF8911),
                             fontWeight: FontWeight.bold,

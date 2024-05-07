@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen_controller.dart';
@@ -26,13 +28,31 @@ class _FeedPageState extends State<FeedPage> {
         appBar: AppBar(
           forceMaterialTransparency: true,
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-          title: const Text(
-            "SOCIALice",
-            style: TextStyle(
-                color: Color(0xffFF8911), fontWeight: FontWeight.bold),
+          title: SizedBox(
+            width: Get.width*0.5,
+            child: const Stack(
+              children: [
+                Positioned(
+                  child: Text(
+                    "SOCIALice",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 65, 63, 63),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Positioned(
+                  left: 3,
+                  child: Text(
+                    "SOCIALice",
+                    style: TextStyle(
+                        color: Color(0xffFF8911), fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
-             IconButton(
+            IconButton(
                 onPressed: () {
                   if (controller.currentPage == 0) {
                     controller.pageController.value.nextPage(
@@ -72,10 +92,8 @@ class _FeedPageState extends State<FeedPage> {
                       size: Get.height * 0.035,
                     )),
               ),
-              
               Expanded(
                   child: ListView.builder(
-                    
                       controller: scrollController,
                       shrinkWrap: true,
                       itemCount: 10,
