@@ -6,7 +6,7 @@ import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/profileReelGridItem.dart';
 
 class ProfileReelGrid extends StatelessWidget {
-  final userId;
+  final String userId;
   const ProfileReelGrid({super.key, required this.userId});
 
   @override
@@ -15,8 +15,7 @@ class ProfileReelGrid extends StatelessWidget {
         stream: FirebaseServices.firestore
             .collection("users")
             .doc(userId)
-            .collection("videos")
-            .orderBy("publishesDateTime", descending: true)
+            .collection("reels")
             .snapshots(),
         builder: (context, snapshot) {
           return snapshot.data!.docs.isEmpty
@@ -36,14 +35,17 @@ class ProfileReelGrid extends StatelessWidget {
                     if (!snapshot.hasData) {
                       return CircularProgressIndicator();
                     } else {
-                      VideoInformationModel videoData =
-                          VideoInformationModel.fromDocumentSnapshot(
-                              snapshot.data!.docs[index]);
-                      
-                      return profileReelGridItem(
-                        videoData,
-                        index: index,
-                      );
+                      return FutureBuilder(
+                          future: FirebaseServices().getVideoDetails(
+                              userId, snapshot.data!.docs[index].id),
+                          builder: (context, videoDetails) {
+                            VideoInformationModel videoData =
+                                videoDetails.data as VideoInformationModel;
+                            return profileReelGridItem(
+                              videoData,
+                              index: index,
+                            );
+                          });
                     }
                   });
         });

@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_ice/models/user_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/user_profile_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:social_ice/utils/uploadMedia.dart';
@@ -24,6 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final uploadReelController = Get.put(UploadMediaController());
   final profileController = Get.put(userProfileController());
   //int videoCount = await FirebaseServices().getVideoCount(userData.uid);
+  bool isFollowing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -140,15 +141,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 flex: 1,
                                 child: SizedBox(
                                     width: Get.width * 0.5,
-                                    child: AppButton(
-                                      onPressed: () async {
-                                        FirebaseServices().followUser(
-                                            widget.userData.uid as String);
-                                      },
-                                      buttonLabel: "Follow",
-                                      color: Colors.white,
-                                      textColor: Colors.black,
-                                    ))),
+                                    child: FutureBuilder(
+                                        future: FirebaseServices()
+                                            .checkIfFollowing(
+                                                widget.userData.uid as String),
+                                        builder: (context, snapshot) {
+                                          isFollowing = snapshot.data as bool;
+                                          return AppButton(
+                                            onPressed: () async {
+                                              if (isFollowing) {
+                                                FirebaseServices().unfollowUser(
+                                                    widget.userData.uid
+                                                        as String);
+                                                setState(() {
+                                                  isFollowing = !isFollowing;
+                                                });
+                                              } else {
+                                                FirebaseServices().followUser(
+                                                    widget.userData.uid
+                                                        as String);
+                                                setState(() {
+                                                  isFollowing = !isFollowing;
+                                                });
+                                              }
+                                            },
+                                            buttonLabel: isFollowing
+                                                ? "Unfollow"
+                                                : "Follow",
+                                            color: Colors.white,
+                                            textColor: Colors.black,
+                                          );
+                                        }))),
                             Flexible(
                                 flex: 1,
                                 child: SizedBox(
@@ -186,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: EdgeInsets.symmetric(
                       horizontal: Get.width * 0.03,
                       vertical: Get.height * 0.01),
-                  child: ProfileReelGrid(userId: widget.userData.uid),
+                  child: ProfileReelGrid(userId: widget.userData.uid as String),
                 ),
               ],
             )

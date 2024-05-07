@@ -13,4 +13,8 @@ class userProfileController extends GetxController {
 
   RxBool isFollowed = false.obs;
   
+
+   checkFollow(targetUserId) async {
+    isFollowed.value = await FirebaseServices().checkIfFollowing(targetUserId);
+  }
 }

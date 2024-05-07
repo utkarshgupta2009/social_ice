@@ -8,9 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/user_model.dart';
 import 'package:social_ice/models/video_information_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/bottom_navigation.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/bottom_navigation.dart';
 import 'package:social_ice/screens/auth_screens/signup/signup_controller.dart';
-import 'package:social_ice/screens/upload_reel/upload_reel_controller.dart';
+import 'package:social_ice/screens/upload_reel_screen/upload_reel_controller.dart';
 //import 'package:social_ice/screens/upload_reel/upload_reel_controller.dart';
 
 class FirebaseServices {
@@ -20,7 +20,7 @@ class FirebaseServices {
   final controller = Get.put(SignupController());
 
   void createAccountWithEmailAndPassword(String userEmail, String userPassword,
-      String userName, String name,File profileImage) async {
+      String userName, String name, File profileImage) async {
     try {
       //step 1 -> adding user details in firestore authentication
       UserCredential credential = await auth.createUserWithEmailAndPassword(
@@ -159,6 +159,7 @@ class FirebaseServices {
       //upload thumbnail to storage
       String thumbnailDownloadUrl =
           await uploadVideoThumbnailToFirestoreDatabase(videoId, videoPath);
+     String publishesDateTime = DateTime.now().toString();
 
       VideoInformationModel videoObject = VideoInformationModel(
         userId: userData.uid,
@@ -170,15 +171,17 @@ class FirebaseServices {
         totalLikes: 0,
         totalComments: 0,
         caption: videoCaption,
-        publishesDateTime: DateTime.now().millisecondsSinceEpoch.toString(),
+        publishesDateTime: publishesDateTime,
       );
 
       await firestore
           .collection("users")
           .doc(userData.uid)
-          .collection("videos")
+          .collection("reels")
           .doc(videoId)
-          .set(videoObject.toJson());
+          .set({
+            "postedAt": publishesDateTime
+          });
 
       await firestore
           .collection("reels")

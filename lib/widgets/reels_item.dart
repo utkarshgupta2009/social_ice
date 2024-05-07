@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/video_information_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/profile_screen_ui.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_ui.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:video_player/video_player.dart';

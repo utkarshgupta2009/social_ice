@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/home_screen/home_screen_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen_controller.dart';
 import 'package:social_ice/screens/auth_screens/login/login_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/my_text_field.dart';

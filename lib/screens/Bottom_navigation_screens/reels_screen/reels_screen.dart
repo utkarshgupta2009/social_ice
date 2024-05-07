@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:social_ice/models/video_information_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reel_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/reels_item.dart';
 

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_ice/models/user_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/home_screen/home_screen.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/user_profile_controller.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/reels_screen/reels_screen.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/reels_screen/reels_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 

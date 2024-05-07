@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/user_model.dart';
-import 'package:social_ice/screens/Bottom_navigation_screens/profile_screen/user_profile_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
 import 'package:social_ice/widgets/ChatListCard.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -17,14 +17,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-            "Messages",
-            style: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
-          ),
-      ),
-        body: FutureBuilder(
+              body: FutureBuilder(
             future: profilecontroller.getCurrentUserData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
