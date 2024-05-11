@@ -99,21 +99,24 @@ class _NewPostScreenState extends State<NewPostScreen> {
                                         fontSize: Get.textScaleFactor * 20),
                                   ),
                                 )
-                              : Container(
-                                  height: Get.height * 0.5,
-                                  width: Get.width,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: controller.mediumType.value == 'image'
-                                      ? Image.file(
-                                          File(controller
-                                              .selectedPostPath.value),
-                                          fit: BoxFit.fill,
-                                        )
-                                      : VideoProvider(
-                                          mediumId:
-                                              controller.mediumId.value))),
+                              : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                    height: Get.height * 0.5,
+                                    width: Get.width,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20)),
+                                    child: controller.mediumType.value == 'image'
+                                        ? Image.file(
+                                            File(controller
+                                                .selectedPostPath.value),
+                                            fit: BoxFit.fill,
+                                          )
+                                        : VideoProvider(
+                                            mediumId:
+                                                controller.mediumId.value)),
+                              )),
                     )),
                 Flexible(
                   flex: 1,

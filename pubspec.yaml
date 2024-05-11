@@ -28,6 +28,7 @@ dependencies:
   photo_gallery: ^2.2.1
   transparent_image: ^2.0.1
   permission_handler: ^11.3.1
+  image: ^4.1.7
 
 
 dev_dependencies:

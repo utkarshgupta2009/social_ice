@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
+import 'package:social_ice/widgets/video_player_widget.dart';
 
-class PostWidget extends StatelessWidget {
+class PostWidget extends StatefulWidget {
   final PostModel post;
 
   PostWidget({required this.post});
 
   @override
+  State<PostWidget> createState() => _PostWidgetState();
+}
+
+class _PostWidgetState extends State<PostWidget> {
+  @override
   Widget build(BuildContext context) {
+    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
       child: Container(
@@ -23,55 +30,55 @@ class PostWidget extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: Get.height * 0.03, // Adjust as per your requirement
-                  backgroundImage: NetworkImage(post.userProfileImageUrl ?? ""),
+                  backgroundImage:
+                      NetworkImage(widget.post.userProfileImageUrl ?? ""),
                 ),
-                SizedBox(width: 10.0),
+                const SizedBox(width: 10.0),
                 Text(
-                  post.username ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  widget.post.username ?? "",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Container(
               clipBehavior: Clip.hardEdge,
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: Image.network(
-                post.mediaUrl ?? "",
-                height: Get.height * 0.4, // Adjust as per your requirement
-                width: Get.width, // Takes full width of the screen
-                fit: BoxFit.fill,
-              ),
+              child: widget.post.mediaType == MediaType.image
+                  ? Image.network(
+                      widget.post.mediaUrl.toString(),
+                      fit: BoxFit.fill,
+                    )
+                  : CustomVideoPlayer(
+                      videoUrl: widget.post.mediaUrl.toString()),
             ),
-            SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(Icons.favorite_border),
+                  icon: const Icon(Icons.favorite_border),
                   onPressed: () {
                     // Handle like button tap
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.chat_bubble_outline),
+                  icon: const Icon(Icons.chat_bubble_outline),
                   onPressed: () {
                     // Handle comment button tap
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                   onPressed: () {
                     // Handle share button tap
                   },
                 ),
               ],
             ),
-            SizedBox(height: 10.0),
             Text(
-              post.caption ?? "",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              widget.post.caption ?? "",
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         ),

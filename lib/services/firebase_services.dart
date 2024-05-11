@@ -272,12 +272,11 @@ class FirebaseServices {
   }
 
   savePostInformationToFireStoreDatabase(
-      mediaPath, String postCaption, MediaType mediaType) async {
+      String mediaPath, String postCaption, MediaType mediaType) async {
     try {
-      Get.back();
-      Get.back();
+      Get.offAll(BottomNavigatorScreen());
       Get.snackbar("Post upload in progress",
-          "you will get a confirmation when video is uploaded");
+          "you will get a confirmation when post is uploaded");
 
       UserModel userData =
           await getUserDetails(FirebaseServices.auth.currentUser!.uid);

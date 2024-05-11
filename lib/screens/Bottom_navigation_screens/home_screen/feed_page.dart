@@ -17,10 +17,36 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  ScrollController scrollController = ScrollController();
+  late ScrollController scrollController;
   bool isSearching = false;
   TextEditingController searchController = TextEditingController();
   final controller = Get.put(HomeScreenController());
+
+  Future<dynamic> _refreshFuture =
+      FirebaseServices.firestore.collection("posts").get();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    _refreshFuture = fetchData(); // Initial data fetch
+  }
+
+  Future<dynamic> fetchData() async {
+    return await FirebaseServices.firestore.collection("posts").get();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _refreshFuture = fetchData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +55,7 @@ class _FeedPageState extends State<FeedPage> {
           forceMaterialTransparency: true,
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
           title: SizedBox(
-            width: Get.width*0.5,
+            width: Get.width * 0.5,
             child: const Stack(
               children: [
                 Positioned(
@@ -93,20 +119,22 @@ class _FeedPageState extends State<FeedPage> {
                     )),
               ),
               Expanded(
-                  child: ListView.builder(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return PostWidget(
-                            post: PostModel(
-                          username: "Utkarsh",
-                          userProfileImageUrl:
-                              "https://i0.wp.com/picjumbo.com/wp-content/uploads/camping-on-top-of-the-mountain-during-sunset-free-photo.jpg",
-                          mediaUrl:
-                              "https://i0.wp.com/picjumbo.com/wp-content/uploads/camping-on-top-of-the-mountain-during-sunset-free-photo.jpg",
-                        ));
-                      }))
+                  child: RefreshIndicator(
+                onRefresh: _refresh,
+                child: FutureBuilder(
+                    future: _refreshFuture,
+                    builder: (context, snapshot) {
+                      return ListView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            PostModel postData = PostModel.fromDocumentSnapshot(
+                                snapshot.data!.docs[index]);
+                            return PostWidget(post: postData);
+                          });
+                    }),
+              ))
             ],
           ),
         ));
