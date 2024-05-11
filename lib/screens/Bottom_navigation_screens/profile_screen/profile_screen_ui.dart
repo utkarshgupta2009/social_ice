@@ -65,8 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: SizedBox(
                                   height: Get.height * 0.1,
                                   width: Get.height * 0.1,
-                                  child: CachedImage(
-                                      widget.userData.profilePicUrl),
+                                  child: Hero(
+                                    tag: Key(widget.userData.uid.toString()),
+                                    child: CachedImage(
+                                        widget.userData.profilePicUrl),
+                                  ),
                                 ),
                               ),
                             ),

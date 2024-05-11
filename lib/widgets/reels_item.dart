@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_ui.dart';
@@ -212,12 +213,16 @@ class _ReelsItemState extends State<ReelsItem> {
                       },
                       child: Row(
                         children: [
-                          ClipOval(
-                            child: SizedBox(
-                              height: Get.height * 0.05,
-                              width: Get.height * 0.05,
-                              child: CachedImage(
-                                  widget.videoData.userProfileImageUrl),
+                          Hero(
+                            tag: Key(widget.videoData.userId.toString()),
+                            
+                            child: ClipOval(
+                              child: SizedBox(
+                                height: Get.height * 0.05,
+                                width: Get.height * 0.05,
+                                child: CachedImage(
+                                    widget.videoData.userProfileImageUrl),
+                              ),
                             ),
                           ),
                           SizedBox(width: Get.width * 0.03),

@@ -103,7 +103,7 @@ class _FeedPageState extends State<FeedPage> {
                           username: "Utkarsh",
                           userProfileImageUrl:
                               "https://i0.wp.com/picjumbo.com/wp-content/uploads/camping-on-top-of-the-mountain-during-sunset-free-photo.jpg",
-                          imageUrl:
+                          mediaUrl:
                               "https://i0.wp.com/picjumbo.com/wp-content/uploads/camping-on-top-of-the-mountain-during-sunset-free-photo.jpg",
                         ));
                       }))

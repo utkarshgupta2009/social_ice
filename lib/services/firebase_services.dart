@@ -29,7 +29,7 @@ class FirebaseServices {
 
       //step 2 -> uploading profile pic to database and fetching the url of profile pic for storing in user details
 
-      String profilePicUrl = await uploadImageToFirebaseStorage(
+      String profilePicUrl = await uploadMediaToFirebaseStorage(
           profileImage, "Users Profile Images");
 
       //step 3 -> add user details to firestore
@@ -55,7 +55,7 @@ class FirebaseServices {
     }
   }
 
-  Future<String> uploadImageToFirebaseStorage(
+  Future<String> uploadMediaToFirebaseStorage(
       File imageFile, String child) async {
     Reference reference =
         storage.ref().child(child).child(auth.currentUser!.uid);
@@ -271,47 +271,42 @@ class FirebaseServices {
     return snapshot.exists;
   }
 
-  saveImagePostInformationToFireStoreDatabase(
-      imagePath, String imageCaption) async {
+  savePostInformationToFireStoreDatabase(
+      mediaPath, String postCaption, MediaType mediaType) async {
     try {
       Get.back();
       Get.back();
-      Get.snackbar("image upload in progress",
+      Get.snackbar("Post upload in progress",
           "you will get a confirmation when video is uploaded");
 
       UserModel userData =
           await getUserDetails(FirebaseServices.auth.currentUser!.uid);
-      String? imageId = auth.currentUser!.uid +
+      String? postId = auth.currentUser!.uid +
           DateTime.now().millisecondsSinceEpoch.toString();
       //upload video to storage
-      String imageDownloadUrl = await uploadImageToFirebaseStorage(
-          File(imagePath), "All Photo Files");
+      String mediaUrl =
+          await uploadMediaToFirebaseStorage(File(mediaPath), "Posts");
       //upload thumbnail to storage
 
       String publishesDateTime = DateTime.now().toString();
 
-      PostModel imagePostObject = PostModel(
-        userId: userData.uid,
-        username: userData.username,
-        userProfileImageUrl: userData.profilePicUrl,
-        postId: imageId,
-        imageUrl: imageDownloadUrl,
-        totalLikes: 0,
-        totalComments: 0,
-        caption: imageCaption,
-        publishesDateTime: publishesDateTime,
-      );
+      PostModel postObject = PostModel(
+          userId: userData.uid,
+          username: userData.username,
+          userProfileImageUrl: userData.profilePicUrl,
+          postId: postId,
+          mediaUrl: mediaUrl,
+          totalLikes: 0,
+          totalComments: 0,
+          caption: postCaption,
+          publishesDateTime: publishesDateTime,
+          mediaType: mediaType);
 
-      await firestore
-          .collection("users")
-          .doc(userData.uid)
-          .collection("images")
-          .doc(imageId)
-          .set(imagePostObject.toJson());
+      await firestore.collection("posts").doc(postId).set(postObject.toJson());
 
-      Get.snackbar("image uploaded", "you have successfully shared your video");
+      Get.snackbar("Post uploaded", "you have successfully shared your post");
     } catch (error) {
-      Get.snackbar("Image upload unsuccessfull", error.toString());
+      Get.snackbar("Post upload unsuccessfull", error.toString());
       //Get.off(UserProfileScreen());
     }
   }

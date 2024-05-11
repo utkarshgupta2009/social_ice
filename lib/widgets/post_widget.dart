@@ -38,7 +38,7 @@ class PostWidget extends StatelessWidget {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: Image.network(
-                post.imageUrl ?? "",
+                post.mediaUrl ?? "",
                 height: Get.height * 0.4, // Adjust as per your requirement
                 width: Get.width, // Takes full width of the screen
                 fit: BoxFit.fill,

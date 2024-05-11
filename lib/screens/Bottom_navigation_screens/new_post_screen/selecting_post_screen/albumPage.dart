@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
-import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/new_post_controller.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/selecting_post_screen/new_post_controller.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AlbumPage extends StatefulWidget {
