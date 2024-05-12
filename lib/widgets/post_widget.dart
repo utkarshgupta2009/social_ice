@@ -17,76 +17,90 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+      padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01,),
       child: Container(
         //padding: EdgeInsets.all(Get.height * 0.018),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
+          color: Color.fromARGB(255, 226, 221, 221)
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Get.to(ProfileScreenBuilder(
-                        uid: widget.post.userId.toString()));
-                  },
-                  child: CircleAvatar(
-                    radius: Get.height * 0.03, // Adjust as per your requirement
-                    backgroundImage:
-                        NetworkImage(widget.post.userProfileImageUrl ?? ""),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(ProfileScreenBuilder(
+                          uid: widget.post.userId.toString()));
+                    },
+                    child: CircleAvatar(
+                      radius: Get.height * 0.028, // Adjust as per your requirement
+                      backgroundImage:
+                          NetworkImage(widget.post.userProfileImageUrl ?? ""),
+                    ),
                   ),
+                  const SizedBox(width: 10.0),
+                  Text(
+                    widget.post.username ?? "",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              Container(
+                height: widget.post.mediaType == MediaType.video
+                    ? Get.height * 0.4
+                    : Image.network(
+                        widget.post.mediaUrl.toString(),
+                        fit: BoxFit.fill,
+                      ).height,
+                clipBehavior: Clip.hardEdge,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                child: widget.post.mediaType == MediaType.image
+                    ? Image.network(
+                        widget.post.mediaUrl.toString(),
+                        fit: BoxFit.fill,
+                      )
+                    : CustomVideoPlayer(
+                        videoUrl: widget.post.mediaUrl.toString()),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.favorite_border),
+                    onPressed: () {
+                      // Handle like button tap
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chat_bubble_outline),
+                    onPressed: () {
+                      // Handle comment button tap
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.share),
+                    onPressed: () {
+                      // Handle share button tap
+                    },
+                  ),
+                ],
+              ),
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: Get.width*0.01),
+                child: Text(
+                  widget.post.caption ?? "",
+                  style:  TextStyle(
+                  fontSize: Get.height*0.018),
                 ),
-                const SizedBox(width: 10.0),
-                Text(
-                  widget.post.username ?? "",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: widget.post.mediaType == MediaType.image
-                  ? Image.network(
-                      widget.post.mediaUrl.toString(),
-                      fit: BoxFit.fill,
-                    )
-                  : CustomVideoPlayer(
-                      videoUrl: widget.post.mediaUrl.toString()),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.favorite_border),
-                  onPressed: () {
-                    // Handle like button tap
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chat_bubble_outline),
-                  onPressed: () {
-                    // Handle comment button tap
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.share),
-                  onPressed: () {
-                    // Handle share button tap
-                  },
-                ),
-              ],
-            ),
-            Text(
-              widget.post.caption ?? "",
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

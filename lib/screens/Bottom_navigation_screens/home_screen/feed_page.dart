@@ -129,7 +129,15 @@ class _FeedPageState extends State<FeedPage> {
                 child: FutureBuilder(
                     future: _refreshFuture,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.data!.docs.length == 0) {
+                        return const Center(
+                          child: Text("No posts to show"),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
                         return ListView.builder(
                             controller: scrollController,
                             shrinkWrap: true,
@@ -138,12 +146,12 @@ class _FeedPageState extends State<FeedPage> {
                               PostModel postData =
                                   PostModel.fromDocumentSnapshot(
                                       snapshot.data!.docs[index]);
-                              return PostWidget(post: postData);
+                              return Padding(
+                                padding:
+                                    EdgeInsets.only(bottom: Get.height * 0.02),
+                                child: PostWidget(post: postData),
+                              );
                             });
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
                       } else {
                         return const Center(
                           child: CircularProgressIndicator.adaptive(),

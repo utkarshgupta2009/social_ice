@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 
 class CustomVideoPlayer extends StatefulWidget {
@@ -12,6 +13,7 @@ class CustomVideoPlayer extends StatefulWidget {
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   late VideoPlayerController _controller;
+  bool isTapped = false;
 
   @override
   void initState() {
@@ -19,6 +21,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized
+
         setState(() {});
       });
   }
@@ -32,8 +35,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void _togglePlayPause() {
     if (_controller.value.isPlaying) {
       _controller.pause();
+      setState(() {
+        isTapped = !isTapped;
+      });
     } else {
       _controller.play();
+      setState(() {
+        isTapped = !isTapped;
+      });
     }
   }
 
@@ -44,12 +53,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          ),
-          if (!_controller.value.isPlaying)
-            Icon(
+          VideoPlayer(_controller),
+          if (!isTapped)
+            const Icon(
               Icons.play_arrow,
               size: 50,
               color: Colors.white,

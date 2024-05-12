@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_ice/models/user_model.dart';
@@ -65,11 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: SizedBox(
                                   height: Get.height * 0.1,
                                   width: Get.height * 0.1,
-                                  child: Hero(
-                                    tag: Key(widget.userData.uid.toString()),
-                                    child: CachedImage(
-                                        widget.userData.profilePicUrl),
-                                  ),
+                                  child: CachedImage(
+                                      widget.userData.profilePicUrl),
                                 ),
                               ),
                             ),
