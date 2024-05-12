@@ -30,23 +30,13 @@ class _MessageScreenState extends State<MessageScreen> {
         body: FutureBuilder(
             future: profilecontroller.getCurrentUserData(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  UserModel userData = snapshot.data as UserModel;
-                  return ListView.builder(
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return ChatListCard(user: userData);
-                      });
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                } else {
-                  return const Center(
-                    child: Text("something went wrong"),
-                  );
-                }
+              if (snapshot.hasData) {
+                UserModel userData = snapshot.data as UserModel;
+                return ListView.builder(
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return ChatListCard(user: userData);
+                    });
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),

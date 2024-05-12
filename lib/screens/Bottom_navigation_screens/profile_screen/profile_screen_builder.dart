@@ -22,7 +22,17 @@ class _ProfileScreenBuilderState extends State<ProfileScreenBuilder> {
         body: FutureBuilder(
             future: FirebaseServices().getUserDetails(widget.uid),
             builder: (context, snapshot) {
-              return ProfileScreen(userData: snapshot.data as UserModel);
+              if (snapshot.hasData) {
+                return ProfileScreen(userData: snapshot.data as UserModel);
+              } else if(snapshot.hasError) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }else{
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             }));
   }
 }

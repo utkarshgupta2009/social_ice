@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
+import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/widgets/video_player_widget.dart';
 
 class PostWidget extends StatefulWidget {
@@ -15,7 +16,6 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
-    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
       child: Container(
@@ -28,10 +28,16 @@ class _PostWidgetState extends State<PostWidget> {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: Get.height * 0.03, // Adjust as per your requirement
-                  backgroundImage:
-                      NetworkImage(widget.post.userProfileImageUrl ?? ""),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(ProfileScreenBuilder(
+                        uid: widget.post.userId.toString()));
+                  },
+                  child: CircleAvatar(
+                    radius: Get.height * 0.03, // Adjust as per your requirement
+                    backgroundImage:
+                        NetworkImage(widget.post.userProfileImageUrl ?? ""),
+                  ),
                 ),
                 const SizedBox(width: 10.0),
                 Text(

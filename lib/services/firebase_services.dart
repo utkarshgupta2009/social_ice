@@ -30,7 +30,7 @@ class FirebaseServices {
       //step 2 -> uploading profile pic to database and fetching the url of profile pic for storing in user details
 
       String profilePicUrl = await uploadMediaToFirebaseStorage(
-          profileImage, "Users Profile Images");
+          profileImage, "Users Profile Images", false, null);
 
       //step 3 -> add user details to firestore
 
@@ -55,17 +55,32 @@ class FirebaseServices {
     }
   }
 
-  Future<String> uploadMediaToFirebaseStorage(
-      File imageFile, String child) async {
-    Reference reference =
-        storage.ref().child(child).child(auth.currentUser!.uid);
+  Future<String> uploadMediaToFirebaseStorage(File mediaFile, String child,
+      bool isSecondChild, String? secondChild) async {
+    if (isSecondChild) {
+      Reference reference = storage
+          .ref()
+          .child(child)
+          .child(auth.currentUser!.uid)
+          .child(secondChild!);
 
-    UploadTask uploadTask = reference.putFile(imageFile);
+      UploadTask uploadTask = reference.putFile(mediaFile);
 
-    TaskSnapshot taskSnapshot = await uploadTask;
+      TaskSnapshot taskSnapshot = await uploadTask;
 
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-    return downloadUrl;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } else {
+      Reference reference =
+          storage.ref().child(child).child(auth.currentUser!.uid);
+
+      UploadTask uploadTask = reference.putFile(mediaFile);
+
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    }
   }
 
   // ignore: non_constant_identifier_names
@@ -283,8 +298,8 @@ class FirebaseServices {
       String? postId = auth.currentUser!.uid +
           DateTime.now().millisecondsSinceEpoch.toString();
       //upload video to storage
-      String mediaUrl =
-          await uploadMediaToFirebaseStorage(File(mediaPath), "Posts");
+      String mediaUrl = await uploadMediaToFirebaseStorage(
+          File(mediaPath), "Posts", true, postId);
       //upload thumbnail to storage
 
       String publishesDateTime = DateTime.now().toString();
@@ -302,6 +317,12 @@ class FirebaseServices {
           mediaType: mediaType);
 
       await firestore.collection("posts").doc(postId).set(postObject.toJson());
+      await firestore
+          .collection("users")
+          .doc(userData.uid)
+          .collection("posts")
+          .doc(postId)
+          .set({"postedAt": publishesDateTime});
 
       Get.snackbar("Post uploaded", "you have successfully shared your post");
     } catch (error) {

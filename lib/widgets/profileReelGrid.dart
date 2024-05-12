@@ -18,36 +18,46 @@ class ProfileReelGrid extends StatelessWidget {
             .collection("reels")
             .snapshots(),
         builder: (context, snapshot) {
-          return snapshot.data!.docs.isEmpty
-              ? const Center(
-                  child: Text("NO REELS UPLOADED."),
-                )
-              : GridView.builder(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 2,
-                      mainAxisExtent: Get.height * 0.23,
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 6),
-                  itemCount: snapshot.data?.docs.length,
-                  itemBuilder: (context, index) {
-                    if (!snapshot.hasData) {
-                      return CircularProgressIndicator();
-                    } else {
-                      return FutureBuilder(
-                          future: FirebaseServices().getVideoDetails(
-                              userId, snapshot.data!.docs[index].id),
-                          builder: (context, videoDetails) {
-                            VideoInformationModel videoData =
-                                videoDetails.data as VideoInformationModel;
-                            return profileReelGridItem(
-                              videoData,
-                              index: index,
-                            );
-                          });
-                    }
-                  });
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          } else if (snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text("No reels uploaded"),
+            );
+          } else if (snapshot.hasData) {
+            return GridView.builder(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 2,
+                    mainAxisExtent: Get.height * 0.23,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 6),
+                itemCount: snapshot.data?.docs.length,
+                itemBuilder: (context, index) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return FutureBuilder(
+                        future: FirebaseServices().getVideoDetails(
+                            userId, snapshot.data!.docs[index].id),
+                        builder: (context, videoDetails) {
+                          VideoInformationModel videoData =
+                              videoDetails.data as VideoInformationModel;
+                          return profileReelGridItem(
+                            videoData,
+                            index: index,
+                          );
+                        });
+                  }
+                });
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         });
   }
 }

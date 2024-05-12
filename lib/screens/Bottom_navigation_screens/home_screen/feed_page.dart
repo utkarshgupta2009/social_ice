@@ -22,8 +22,10 @@ class _FeedPageState extends State<FeedPage> {
   TextEditingController searchController = TextEditingController();
   final controller = Get.put(HomeScreenController());
 
-  Future<dynamic> _refreshFuture =
-      FirebaseServices.firestore.collection("posts").get();
+  Future<dynamic> _refreshFuture = FirebaseServices.firestore
+      .collection("posts")
+      .where("userId", isNotEqualTo: FirebaseServices.auth.currentUser?.uid)
+      .get();
 
   @override
   void initState() {
@@ -33,7 +35,10 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Future<dynamic> fetchData() async {
-    return await FirebaseServices.firestore.collection("posts").get();
+    return await FirebaseServices.firestore
+        .collection("posts")
+        .where("userId", isNotEqualTo: FirebaseServices.auth.currentUser?.uid)
+        .get();
   }
 
   @override
@@ -124,15 +129,26 @@ class _FeedPageState extends State<FeedPage> {
                 child: FutureBuilder(
                     future: _refreshFuture,
                     builder: (context, snapshot) {
-                      return ListView.builder(
-                          controller: scrollController,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            PostModel postData = PostModel.fromDocumentSnapshot(
-                                snapshot.data!.docs[index]);
-                            return PostWidget(post: postData);
-                          });
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            controller: scrollController,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              PostModel postData =
+                                  PostModel.fromDocumentSnapshot(
+                                      snapshot.data!.docs[index]);
+                              return PostWidget(post: postData);
+                            });
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
+                      }
                     }),
               ))
             ],
