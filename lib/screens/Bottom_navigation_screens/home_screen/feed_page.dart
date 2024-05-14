@@ -56,6 +56,7 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         appBar: AppBar(
           forceMaterialTransparency: true,
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),

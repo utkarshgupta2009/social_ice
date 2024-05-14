@@ -51,6 +51,8 @@ class _ReelsItemState extends State<ReelsItem> {
 
   @override
   Widget build(BuildContext context) {
+    int totalLikes = widget.videoData.totalLikes!;
+
     final int captionWordCount =
         widget.videoData.caption.toString().split(" ").length;
 
@@ -162,14 +164,17 @@ class _ReelsItemState extends State<ReelsItem> {
                                     widget.videoData.videoId as String);
                                 setState(() {
                                   isLiked = !isLiked;
+                                  totalLikes++;
                                 });
                               } else {
                                 FirebaseServices().likeReel(
                                     widget.videoData.videoId as String);
                                 setState(() {
                                   isLiked = !isLiked;
+                                  totalLikes--;
                                 });
                               }
+                              
                             },
                             icon: Icon(
                               isLiked
@@ -181,7 +186,7 @@ class _ReelsItemState extends State<ReelsItem> {
                           );
                         }),
                     Text(
-                      widget.videoData.totalLikes.toString(),
+                      totalLikes.toString(),
                       style: TextStyle(
                         fontSize: Get.pixelRatio * 6,
                         color: Colors.white,

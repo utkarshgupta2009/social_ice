@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/services/firebase_services.dart';
+import 'package:social_ice/widgets/comment_bottom_sheet.dart';
 import 'package:social_ice/widgets/video_player_widget.dart';
 
 class PostWidget extends StatefulWidget {
@@ -31,7 +33,7 @@ class _PostWidgetState extends State<PostWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -75,6 +77,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   FutureBuilder(
                       future:
@@ -106,11 +109,25 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                         );
                       }),
-                  IconButton(
-                    icon: const Icon(Icons.chat_bubble_outline),
-                    onPressed: () {
-                      // Handle comment button tap
-                    },
+                  Text(
+                    widget.post.totalLikes.toString(),
+                    style: TextStyle(
+                      fontSize: Get.pixelRatio * 6,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
+                    child: IconButton(
+                      icon: const Icon(Icons.chat_bubble_outline),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => CommentBottomSheet(),
+                        );
+                        // Handle comment button tap
+                      },
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.share),
