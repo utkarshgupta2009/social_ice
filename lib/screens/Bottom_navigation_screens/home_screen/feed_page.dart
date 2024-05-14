@@ -154,7 +154,7 @@ class _FeedPageState extends State<FeedPage> {
                             });
                       } else {
                         return const Center(
-                          child: CircularProgressIndicator.adaptive(),
+                          child: CircularProgressIndicator(),
                         );
                       }
                     }),

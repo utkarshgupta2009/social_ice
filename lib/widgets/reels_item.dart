@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -22,13 +23,14 @@ class _ReelsItemState extends State<ReelsItem> {
   bool play = true;
   bool isPlayingNotifier = false;
   final reelController = Get.put(ReelController());
+  bool isLiked = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // ignore: deprecated_member_use
-   // final String path = widget.videoData.videoUrl[]
+    // final String path = widget.videoData.videoUrl[]
     Uri uri = Uri.parse(widget.videoData.videoUrl.toString());
     controller = VideoPlayerController.networkUrl(uri)
       ..initialize().then((value) {
@@ -148,14 +150,36 @@ class _ReelsItemState extends State<ReelsItem> {
                         blurStyle: BlurStyle.normal)
                   ]),
                   child: Column(children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.favorite_border_rounded,
-                        color: Colors.white,
-                        size: Get.pixelRatio * 12,
-                      ),
-                    ),
+                    FutureBuilder(
+                        future: FirebaseServices()
+                            .isReelLiked(widget.videoData.videoId),
+                        builder: (context, snapshot) {
+                          isLiked = snapshot.data as bool;
+                          return IconButton(
+                            onPressed: () {
+                              if (isLiked) {
+                                FirebaseServices().unlikeReel(
+                                    widget.videoData.videoId as String);
+                                setState(() {
+                                  isLiked = !isLiked;
+                                });
+                              } else {
+                                FirebaseServices().likeReel(
+                                    widget.videoData.videoId as String);
+                                setState(() {
+                                  isLiked = !isLiked;
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              isLiked
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                              color: isLiked ? Colors.red : Colors.white,
+                              size: Get.pixelRatio * 12,
+                            ),
+                          );
+                        }),
                     Text(
                       widget.videoData.totalLikes.toString(),
                       style: TextStyle(
@@ -215,7 +239,6 @@ class _ReelsItemState extends State<ReelsItem> {
                         children: [
                           Hero(
                             tag: Key(widget.videoData.userId.toString()),
-                            
                             child: ClipOval(
                               child: SizedBox(
                                 height: Get.height * 0.05,

@@ -19,6 +19,7 @@ class FirebaseServices {
   static var storage = FirebaseStorage.instance;
   static var firestore = FirebaseFirestore.instance;
   final controller = Get.put(SignupController());
+  String currentUserId = auth.currentUser?.uid as String;
 
   void createAccountWithEmailAndPassword(String userEmail, String userPassword,
       String userName, String name, File profileImage) async {
@@ -329,5 +330,83 @@ class FirebaseServices {
       Get.snackbar("Post upload unsuccessfull", error.toString());
       //Get.off(UserProfileScreen());
     }
+  }
+
+  void likePost(String postId) async {
+    await firestore
+        .collection("posts")
+        .doc(postId)
+        .collection("likes")
+        .doc(currentUserId)
+        .set({"likedAt": DateTime.now()});
+
+    await firestore
+        .collection("posts")
+        .doc(postId)
+        .update({"totalLikes": FieldValue.increment(1)});
+  }
+
+  void unlikePost(String postId) async {
+    await firestore
+        .collection("posts")
+        .doc(postId)
+        .collection("likes")
+        .doc(currentUserId)
+        .delete();
+
+    await firestore
+        .collection("posts")
+        .doc(postId)
+        .update({"totalLikes": FieldValue.increment(-1)});
+  }
+
+  void likeReel(String targetReelId) async {
+    await firestore
+        .collection("reels")
+        .doc(targetReelId)
+        .collection("likes")
+        .doc(currentUserId)
+        .set({"likedAt": DateTime.now()});
+
+    await firestore
+        .collection("reels")
+        .doc(targetReelId)
+        .update({"totalLikes": FieldValue.increment(1)});
+  }
+
+  void unlikeReel(String targetReelId) async {
+    await firestore
+        .collection("reels")
+        .doc(targetReelId)
+        .collection("likes")
+        .doc(currentUserId)
+        .delete();
+
+    await firestore
+        .collection("reels")
+        .doc(targetReelId)
+        .update({"totalLikes": FieldValue.increment(-1)});
+  }
+
+  Future<bool> isPostLiked(targetPostId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(targetPostId)
+        .collection('likes')
+        .doc(currentUserId)
+        .get();
+
+    return snapshot.exists;
+  }
+
+  Future<bool> isReelLiked(targetReelId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('reels')
+        .doc(targetReelId)
+        .collection('likes')
+        .doc(currentUserId)
+        .get();
+
+    return snapshot.exists;
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
+import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/video_player_widget.dart';
 
 class PostWidget extends StatefulWidget {
@@ -14,16 +16,18 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  bool isLiked = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01,),
+      padding: EdgeInsets.symmetric(
+        horizontal: Get.height * 0.01,
+      ),
       child: Container(
         //padding: EdgeInsets.all(Get.height * 0.018),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: Color.fromARGB(255, 226, 221, 221)
-        ),
+            borderRadius: BorderRadius.circular(20.0),
+            color: Color.fromARGB(255, 226, 221, 221)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -37,7 +41,8 @@ class _PostWidgetState extends State<PostWidget> {
                           uid: widget.post.userId.toString()));
                     },
                     child: CircleAvatar(
-                      radius: Get.height * 0.028, // Adjust as per your requirement
+                      radius:
+                          Get.height * 0.028, // Adjust as per your requirement
                       backgroundImage:
                           NetworkImage(widget.post.userProfileImageUrl ?? ""),
                     ),
@@ -71,12 +76,36 @@ class _PostWidgetState extends State<PostWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.favorite_border),
-                    onPressed: () {
-                      // Handle like button tap
-                    },
-                  ),
+                  FutureBuilder(
+                      future:
+                          FirebaseServices().isPostLiked(widget.post.postId),
+                      builder: (context, snapshot) {
+                        isLiked = snapshot.data as bool;
+                        return IconButton(
+                          onPressed: () {
+                            if (isLiked) {
+                              FirebaseServices()
+                                  .unlikePost(widget.post.postId as String);
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                            } else {
+                              FirebaseServices()
+                                  .likePost(widget.post.postId as String);
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                            }
+                          },
+                          icon: Icon(
+                            isLiked
+                                ? Icons.favorite
+                                : Icons.favorite_border_outlined,
+                            color: isLiked ? Colors.red : null,
+                            size: Get.pixelRatio * 12,
+                          ),
+                        );
+                      }),
                   IconButton(
                     icon: const Icon(Icons.chat_bubble_outline),
                     onPressed: () {
@@ -92,11 +121,10 @@ class _PostWidgetState extends State<PostWidget> {
                 ],
               ),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: Get.width*0.01),
+                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
                 child: Text(
                   widget.post.caption ?? "",
-                  style:  TextStyle(
-                  fontSize: Get.height*0.018),
+                  style: TextStyle(fontSize: Get.height * 0.018),
                 ),
               ),
             ],

@@ -26,6 +26,8 @@ class ProfileReelGrid extends StatelessWidget {
             return const Center(
               child: Text("No reels uploaded"),
             );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
           } else if (snapshot.hasData) {
             return GridView.builder(
                 physics: const ScrollPhysics(),
