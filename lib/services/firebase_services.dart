@@ -19,7 +19,6 @@ class FirebaseServices {
   static var storage = FirebaseStorage.instance;
   static var firestore = FirebaseFirestore.instance;
   final controller = Get.put(SignupController());
-  String currentUserId = auth.currentUser?.uid as String;
 
   void createAccountWithEmailAndPassword(String userEmail, String userPassword,
       String userName, String name, File profileImage) async {
@@ -337,7 +336,7 @@ class FirebaseServices {
         .collection("posts")
         .doc(postId)
         .collection("likes")
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .set({"likedAt": DateTime.now()});
 
     await firestore
@@ -351,7 +350,7 @@ class FirebaseServices {
         .collection("posts")
         .doc(postId)
         .collection("likes")
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .delete();
 
     await firestore
@@ -365,7 +364,7 @@ class FirebaseServices {
         .collection("reels")
         .doc(targetReelId)
         .collection("likes")
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .set({"likedAt": DateTime.now()});
 
     await firestore
@@ -379,7 +378,7 @@ class FirebaseServices {
         .collection("reels")
         .doc(targetReelId)
         .collection("likes")
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .delete();
 
     await firestore
@@ -393,7 +392,7 @@ class FirebaseServices {
         .collection('posts')
         .doc(targetPostId)
         .collection('likes')
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .get();
 
     return snapshot.exists;
@@ -404,7 +403,7 @@ class FirebaseServices {
         .collection('reels')
         .doc(targetReelId)
         .collection('likes')
-        .doc(currentUserId)
+        .doc(auth.currentUser?.uid)
         .get();
 
     return snapshot.exists;

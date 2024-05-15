@@ -5,7 +5,6 @@ import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/widgets/app_button.dart';
 import 'package:social_ice/widgets/my_text_field.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -42,7 +41,7 @@ class _ScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: Get.height * 0.07),
               Padding(
-                padding:  EdgeInsets.all(Get.height*0.015),
+                padding: EdgeInsets.all(Get.height * 0.015),
                 child: Form(
                   key: emailKey,
                   child: MyTextField(
@@ -60,7 +59,7 @@ class _ScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: Get.height * 0.03),
               Padding(
-                padding:  EdgeInsets.all((Get.height*0.015)),
+                padding: EdgeInsets.all((Get.height * 0.015)),
                 child: Form(
                   key: passwordKey,
                   child: MyTextField(
@@ -77,7 +76,7 @@ class _ScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: Get.height * 0.02),
               SizedBox(
-                width: Get.width*0.5,
+                width: Get.width * 0.5,
                 child: AppButton(
                     onPressed: () {
                       FirebaseServices().LoginUserWithEmailAndPassword(
