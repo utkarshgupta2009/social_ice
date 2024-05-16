@@ -4,7 +4,7 @@ class ChatMessage {
   final String messageId;
   final String senderId;
   final String content;
-  final DateTime timestamp;
+  final String timestamp;
 
   ChatMessage({
     required this.messageId,
@@ -19,7 +19,7 @@ class ChatMessage {
       messageId: snapshot.id,
       senderId: data['senderId'],
       content: data['content'],
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
+      timestamp: data['timestamp'],
     );
   }
 
@@ -28,7 +28,7 @@ class ChatMessage {
       'messageId': messageId,
       'senderId': senderId,
       'content': content,
-      'timestamp': timestamp.toIso8601String(),
+      'timestamp': timestamp,
     };
   }
 }

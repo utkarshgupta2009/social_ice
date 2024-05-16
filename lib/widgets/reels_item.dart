@@ -25,6 +25,14 @@ class _ReelsItemState extends State<ReelsItem> {
   final reelController = Get.put(ReelController());
   bool isLiked = false;
 
+  void isReelLiked() async {
+    bool liked =
+        await FirebaseServices().isReelLiked(widget.videoData.videoUrl);
+    setState(() {
+      isLiked = liked;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +48,8 @@ class _ReelsItemState extends State<ReelsItem> {
           //controller!.play();
         });
       });
+
+    isReelLiked();
   }
 
   @override
@@ -153,9 +163,18 @@ class _ReelsItemState extends State<ReelsItem> {
                   ]),
                   child: Column(children: [
                     FutureBuilder(
-                        future: FirebaseServices()
-                            .isReelLiked(widget.videoData.videoId),
-                        builder: (context, snapshot) {
+                      future: FirebaseServices()
+                          .isReelLiked(widget.videoData.videoId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // If the future is still waiting for data, display a loading indicator
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          // If there is an error while fetching data, display the error message
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          // If the future has completed with data
                           isLiked = snapshot.data as bool;
                           return IconButton(
                             onPressed: () {
@@ -174,7 +193,6 @@ class _ReelsItemState extends State<ReelsItem> {
                                   totalLikes--;
                                 });
                               }
-                              
                             },
                             icon: Icon(
                               isLiked
@@ -184,7 +202,12 @@ class _ReelsItemState extends State<ReelsItem> {
                               size: Get.pixelRatio * 12,
                             ),
                           );
-                        }),
+                        } else {
+                          // If the connection state is not covered by any of the above cases
+                          return const Text('Something went wrong');
+                        }
+                      },
+                    ),
                     Text(
                       totalLikes.toString(),
                       style: TextStyle(
@@ -242,15 +265,12 @@ class _ReelsItemState extends State<ReelsItem> {
                       },
                       child: Row(
                         children: [
-                          Hero(
-                            tag: Key(widget.videoData.userId.toString()),
-                            child: ClipOval(
-                              child: SizedBox(
-                                height: Get.height * 0.05,
-                                width: Get.height * 0.05,
-                                child: CachedImage(
-                                    widget.videoData.userProfileImageUrl),
-                              ),
+                          ClipOval(
+                            child: SizedBox(
+                              height: Get.height * 0.05,
+                              width: Get.height * 0.05,
+                              child: CachedImage(
+                                  widget.videoData.userProfileImageUrl),
                             ),
                           ),
                           SizedBox(width: Get.width * 0.03),
