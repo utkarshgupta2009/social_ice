@@ -139,29 +139,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 flex: 1,
                                 child: SizedBox(
                                     width: Get.width * 0.5,
-                                    child: FutureBuilder(
-                                        future: FirebaseServices()
-                                            .checkIfFollowing(
-                                                widget.userData.uid as String),
-                                        builder: (context, snapshot) {
-                                          isFollowing = snapshot.data as bool;
+                                    child: FutureBuilder<bool>(
+                                      future: FirebaseServices()
+                                          .checkIfFollowing(
+                                              widget.userData.uid as String),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          // While the future is still resolving
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          // If there's an error in fetching the data
+                                          return Center(
+                                            child: Text(
+                                                "Error: ${snapshot.error}"),
+                                          );
+                                        } else {
+                                          // If the data is successfully fetched or if the future is completed
+                                          bool isFollowing = snapshot.data!;
                                           return AppButton(
                                             onPressed: () async {
                                               if (isFollowing) {
-                                                FirebaseServices().unfollowUser(
-                                                    widget.userData.uid
-                                                        as String);
-                                                setState(() {
-                                                  isFollowing = !isFollowing;
-                                                });
+                                                await FirebaseServices()
+                                                    .unfollowUser(widget
+                                                        .userData
+                                                        .uid as String);
                                               } else {
                                                 FirebaseServices().followUser(
                                                     widget.userData.uid
                                                         as String);
-                                                setState(() {
-                                                  isFollowing = !isFollowing;
-                                                });
                                               }
+                                              setState(() {
+                                                isFollowing = !isFollowing;
+                                              });
                                             },
                                             buttonLabel: isFollowing
                                                 ? "Unfollow"
@@ -169,7 +181,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             color: Colors.white,
                                             textColor: Colors.black,
                                           );
-                                        }))),
+                                        }
+                                      },
+                                    ))),
                             Flexible(
                                 flex: 1,
                                 child: SizedBox(

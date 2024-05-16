@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen_controller.dart';
@@ -22,7 +21,7 @@ class _FeedPageState extends State<FeedPage> {
   TextEditingController searchController = TextEditingController();
   final controller = Get.put(HomeScreenController());
 
-  Future<dynamic> _refreshFuture = FirebaseServices.firestore
+  Future<QuerySnapshot> _refreshFuture = FirebaseServices.firestore
       .collection("posts")
       .where("userId", isNotEqualTo: FirebaseServices.auth.currentUser?.uid)
       .get();
@@ -34,7 +33,7 @@ class _FeedPageState extends State<FeedPage> {
     _refreshFuture = fetchData(); // Initial data fetch
   }
 
-  Future<dynamic> fetchData() async {
+  Future<QuerySnapshot> fetchData() async {
     return await FirebaseServices.firestore
         .collection("posts")
         .where("userId", isNotEqualTo: FirebaseServices.auth.currentUser?.uid)
@@ -56,7 +55,7 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           forceMaterialTransparency: true,
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -126,40 +125,58 @@ class _FeedPageState extends State<FeedPage> {
               ),
               Expanded(
                   child: RefreshIndicator(
-                onRefresh: _refresh,
-                child: FutureBuilder(
-                    future: _refreshFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.data!.docs.length == 0) {
-                        return const Center(
-                          child: Text("No posts to show"),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        return ListView.builder(
-                            controller: scrollController,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              PostModel postData =
-                                  PostModel.fromDocumentSnapshot(
-                                      snapshot.data!.docs[index]);
-                              return Padding(
-                                padding:
-                                    EdgeInsets.only(bottom: Get.height * 0.02),
-                                child: PostWidget(post: postData),
+                      onRefresh: _refresh,
+                      child: FutureBuilder<QuerySnapshot>(
+                        future: _refreshFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.none) {
+                            // If the future has not been initialized yet, display a placeholder
+                            return const Center(child: Text('Loading...'));
+                          } else if (snapshot.hasError) {
+                            // If there is an error while fetching data, display the error message
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // If the future is still waiting for data, display a loading indicator
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.connectionState ==
+                                  ConnectionState.active ||
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            // If the future has completed with data or is actively receiving updates
+
+                            if (snapshot.data!.docs.isEmpty) {
+                              // If there are no posts, display a message
+                              return const Center(
+                                  child: Text('No posts to show'));
+                            } else {
+                              // If there are posts, build the ListView
+                              return ListView.builder(
+                                controller: scrollController,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  PostModel postData =
+                                      PostModel.fromDocumentSnapshot(
+                                          snapshot.data!.docs[index]);
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: Get.height * 0.02),
+                                    child: PostWidget(post: postData),
+                                  );
+                                },
                               );
-                            });
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }),
-              ))
+                            }
+                          } else {
+                            // If the connection state is not covered by any of the above cases
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          }
+                        },
+                      )))
             ],
           ),
         ));

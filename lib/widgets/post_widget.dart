@@ -58,12 +58,8 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               const SizedBox(height: 10.0),
               Container(
-                height: widget.post.mediaType == MediaType.video
-                    ? Get.height * 0.4
-                    : Image.network(
-                        widget.post.mediaUrl.toString(),
-                        fit: BoxFit.fill,
-                      ).height,
+                height: Get.height * 0.4,
+                width: double.infinity,
                 clipBehavior: Clip.hardEdge,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
@@ -71,6 +67,24 @@ class _PostWidgetState extends State<PostWidget> {
                     ? Image.network(
                         widget.post.mediaUrl.toString(),
                         fit: BoxFit.fill,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            // Image has finished loading
+                            return child;
+                          } else {
+                            // Image is still loading
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
                       )
                     : CustomVideoPlayer(
                         videoUrl: widget.post.mediaUrl.toString()),
@@ -79,23 +93,32 @@ class _PostWidgetState extends State<PostWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  FutureBuilder(
-                      future:
-                          FirebaseServices().isPostLiked(widget.post.postId),
-                      builder: (context, snapshot) {
-                        isLiked = snapshot.data as bool;
+                  FutureBuilder<bool>(
+                    future: FirebaseServices().isPostLiked(widget.post.postId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // If the future is still waiting for data, display a loading indicator
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        // If there is an error while fetching data, display the error message
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        // If the future has completed with data
+                        isLiked = snapshot.data!;
                         return IconButton(
                           onPressed: () {
                             if (isLiked) {
                               FirebaseServices()
                                   .unlikePost(widget.post.postId as String);
                               setState(() {
+                                // Update the state when the post is unliked
                                 isLiked = !isLiked;
                               });
                             } else {
                               FirebaseServices()
                                   .likePost(widget.post.postId as String);
                               setState(() {
+                                // Update the state when the post is liked
                                 isLiked = !isLiked;
                               });
                             }
@@ -108,7 +131,12 @@ class _PostWidgetState extends State<PostWidget> {
                             size: Get.pixelRatio * 12,
                           ),
                         );
-                      }),
+                      } else {
+                        // If the connection state is not covered by any of the above cases
+                        return const Text('Something went wrong');
+                      }
+                    },
+                  ),
                   Text(
                     widget.post.totalLikes.toString(),
                     style: TextStyle(

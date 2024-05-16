@@ -14,6 +14,7 @@ class CustomVideoPlayer extends StatefulWidget {
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   late VideoPlayerController _controller;
   bool isTapped = false;
+  bool isInitializing = true;
 
   @override
   void initState() {
@@ -22,7 +23,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized
 
-        setState(() {});
+        setState(() {
+          isInitializing = false;
+        });
       });
   }
 
@@ -54,12 +57,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         alignment: Alignment.center,
         children: <Widget>[
           VideoPlayer(_controller),
-          if (!isTapped)
+          if (!isTapped && !isInitializing)
             const Icon(
               Icons.play_arrow,
               size: 50,
               color: Colors.white,
             ),
+            if (isInitializing)
+          const CircularProgressIndicator(),
         ],
       ),
     );

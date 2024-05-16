@@ -26,46 +26,58 @@ class _ReelScreenState extends State<ReelsScreen> {
             .orderBy('publishesDateTime', descending: true)
             .get(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          } else if (snapshot.data!.docs.isEmpty) {
-            return const Center(
-              child: Text("No reels to show"),
-            );
-          } else if (snapshot.hasData) {
-            return PreloadPageView.builder(
-              preloadPagesCount: 5,
-              physics: const ClampingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              controller: PreloadPageController(
-                initialPage: 0,
-                viewportFraction: 1,
-              ),
-              onPageChanged: (value) {
-                reelsController.isCaptionTapped.value = false;
-              },
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-                final String videoId =
-                    snapshot.data!.docs[index].data()["videoId"].toString();
-                final String userId =
-                    snapshot.data!.docs[index].data()["userId"].toString();
-                return FutureBuilder(
-                    future: FirebaseServices().getVideoDetails(userId, videoId),
-                    builder: (context, snapshot) {
-                      VideoInformationModel videoData =
-                          snapshot.data as VideoInformationModel;
-                      return ReelsItem(videoData);
-                    });
-              },
-            );
+          if (snapshot.connectionState == ConnectionState.none) {
+            // If the future has not been initialized yet, display a placeholder
+            return const Center(child: Text('Loading...'));
+          } else if (snapshot.hasError) {
+            // If there is an error while fetching data, display the error message
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            // If the future is still waiting for data, display a loading indicator
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState == ConnectionState.active ||
+              snapshot.connectionState == ConnectionState.done) {
+            // If the future has completed with data or is actively receiving updates
+
+            if (snapshot.data!.docs.isEmpty) {
+              // If there are no posts, display a message
+              return const Center(child: Text('No posts to show'));
+            } else {
+              // If there are posts, build the ListView
+              return PreloadPageView.builder(
+                preloadPagesCount: 5,
+                physics: const ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                controller: PreloadPageController(
+                  initialPage: 0,
+                  viewportFraction: 1,
+                ),
+                onPageChanged: (value) {
+                  reelsController.isCaptionTapped.value = false;
+                },
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+                  final String videoId =
+                      snapshot.data!.docs[index].data()["videoId"].toString();
+                  final String userId =
+                      snapshot.data!.docs[index].data()["userId"].toString();
+                  return FutureBuilder(
+                      future:
+                          FirebaseServices().getVideoDetails(userId, videoId),
+                      builder: (context, snapshot) {
+                        VideoInformationModel videoData =
+                            snapshot.data as VideoInformationModel;
+                        return ReelsItem(videoData);
+                      });
+                },
+              );
+            }
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            // If the connection state is not covered by any of the above cases
+            return const Center(child: Text('Something went wrong'));
           }
         },
       ),
