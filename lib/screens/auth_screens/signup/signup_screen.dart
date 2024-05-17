@@ -7,8 +7,8 @@ import 'package:social_ice/screens/auth_screens/login/login_screen.dart';
 import 'package:social_ice/screens/auth_screens/signup/signup_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/uploadMedia.dart';
-import 'package:social_ice/widgets/app_button.dart';
-import 'package:social_ice/widgets/my_text_field.dart';
+import 'package:social_ice/widgets/app_widgets/app_button.dart';
+import 'package:social_ice/widgets/app_widgets/my_text_field.dart';
 
 
 class SignUpScreen extends StatefulWidget {

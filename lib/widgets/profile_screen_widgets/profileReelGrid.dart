@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/profileReelGridItem.dart';
+import 'package:social_ice/widgets/profile_screen_widgets/profileReelGridItem.dart';
 
 class ProfileReelGrid extends StatelessWidget {
   final String userId;

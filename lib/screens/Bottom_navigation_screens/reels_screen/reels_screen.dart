@@ -4,7 +4,7 @@ import 'package:preload_page_view/preload_page_view.dart';
 import 'package:social_ice/models/video_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/reels_screen/reel_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/reels_item.dart';
+import 'package:social_ice/widgets/reels_screen_widget/reels_item.dart';
 
 class ReelsScreen extends StatefulWidget {
   const ReelsScreen({super.key});

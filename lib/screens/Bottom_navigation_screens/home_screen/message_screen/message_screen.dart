@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:social_ice/models/user_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/ChatListCard.dart';
+import 'package:social_ice/widgets/chat_widgets/ChatListCard.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({super.key});

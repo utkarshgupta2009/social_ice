@@ -11,7 +11,7 @@ import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/sel
 import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/selecting_post_screen/albumPage.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/selecting_post_screen/new_post_controller.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/uploading_post_screen/upload_post_screen.dart';
-import 'package:social_ice/widgets/app_button.dart';
+import 'package:social_ice/widgets/app_widgets/app_button.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 /// The main widget of example app

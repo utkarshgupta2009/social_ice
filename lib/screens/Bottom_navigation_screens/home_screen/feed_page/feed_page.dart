@@ -5,8 +5,8 @@ import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/home_screen/home_screen_controller.dart';
 import 'package:social_ice/screens/auth_screens/login/login_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/my_text_field.dart';
-import 'package:social_ice/widgets/post_widget.dart';
+import 'package:social_ice/widgets/app_widgets/my_text_field.dart';
+import 'package:social_ice/widgets/feed_page_widgets/post_widget.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});

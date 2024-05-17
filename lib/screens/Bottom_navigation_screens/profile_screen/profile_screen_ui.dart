@@ -6,9 +6,9 @@ import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:social_ice/utils/uploadMedia.dart';
-import 'package:social_ice/widgets/app_button.dart';
-import 'package:social_ice/widgets/profileReelGrid.dart';
-import 'package:social_ice/widgets/user_profile_row_widget.dart';
+import 'package:social_ice/widgets/app_widgets/app_button.dart';
+import 'package:social_ice/widgets/profile_screen_widgets/profileReelGrid.dart';
+import 'package:social_ice/widgets/profile_screen_widgets/user_profile_row_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel userData;

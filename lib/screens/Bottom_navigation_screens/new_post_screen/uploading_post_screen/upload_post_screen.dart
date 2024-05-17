@@ -7,8 +7,8 @@ import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/sel
 import 'package:social_ice/screens/bottom_navigation_screens/new_post_screen/selecting_post_screen/new_post_controller.dart';
 import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/utils/resize_image.dart';
-import 'package:social_ice/widgets/app_button.dart';
-import 'package:social_ice/widgets/expandable_textfield.dart';
+import 'package:social_ice/widgets/app_widgets/app_button.dart';
+import 'package:social_ice/widgets/app_widgets/expandable_textfield.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});
@@ -23,7 +23,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        title: const Text("Uploading a post"),
+      ),
       body: Column(
         children: [
           Flexible(

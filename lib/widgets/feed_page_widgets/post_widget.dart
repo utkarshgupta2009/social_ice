@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/comment_bottom_sheet.dart';
-import 'package:social_ice/widgets/video_player_widget.dart';
+import 'package:social_ice/widgets/app_widgets/comment_bottom_sheet.dart';
+import 'package:social_ice/utils/video_player_widget.dart';
 
 class PostWidget extends StatefulWidget {
   final PostModel post;

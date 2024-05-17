@@ -26,7 +26,7 @@ class _ChatListCardState extends State<ChatListCard> {
           elevation: 3,
           child: ListTile(
             onTap: () {
-              Get.to(ChattingScreen(chatId: widget.chatId, chattingWith: widget.user,));
+              Get.to(()=>ChattingScreen(chatId: widget.chatId, chattingWith: widget.user,));
             },
             title: Text(
               widget.user.name.toString(),

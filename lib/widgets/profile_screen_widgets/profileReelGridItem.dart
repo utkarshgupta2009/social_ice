@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/models/video_information_model.dart';
-import 'package:social_ice/widgets/reels_item.dart';
+import 'package:social_ice/widgets/reels_screen_widget/reels_item.dart';
 
 class profileReelGridItem extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables

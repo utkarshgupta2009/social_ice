@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_ice/screens/auth_screens/signup/signup_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
-import 'package:social_ice/widgets/app_button.dart';
-import 'package:social_ice/widgets/my_text_field.dart';
+import 'package:social_ice/widgets/app_widgets/app_button.dart';
+import 'package:social_ice/widgets/app_widgets/my_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

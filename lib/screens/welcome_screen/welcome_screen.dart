@@ -4,7 +4,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_ice/screens/auth_screens/login/login_screen.dart';
 import 'package:social_ice/screens/auth_screens/signup/signup_screen.dart';
-import 'package:social_ice/widgets/get_to_button.dart';
+import 'package:social_ice/widgets/app_widgets/get_to_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
