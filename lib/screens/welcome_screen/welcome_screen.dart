@@ -34,13 +34,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 bottom: Get.height * 0.01,
                 left: Get.height * 0.1,
                 right: Get.height * 0.1),
-            child: Lottie.asset("assets/lottie/welcome_screen_cart.json"),
+            child: Lottie.asset("assets/lottie/welcome_screen.json"),
           ),
           SizedBox(
-            height: Get.height*0.04,
+            height: Get.height * 0.04,
           ),
-          const GetToButtonWidget(buttonLabel: "Login", goToPage: LoginScreen()),
-          const GetToButtonWidget(goToPage: SignUpScreen(), buttonLabel: "Sign up")
+          const GetToButtonWidget(
+              buttonLabel: "Login", goToPage: LoginScreen()),
+          const GetToButtonWidget(
+              goToPage: SignUpScreen(), buttonLabel: "Sign up")
         ],
       ))),
     );
