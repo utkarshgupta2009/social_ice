@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class CommentBottomSheet extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     return SingleChildScrollView(
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.7, // Adjust this value as per your requirement
+          maxHeight: Get.height * 0.7, // Adjust this value as per your requirement
         ),
         decoration: const BoxDecoration(
           color: Colors.white,
