@@ -17,9 +17,10 @@ class CachedImage extends StatelessWidget {
         return Container(
           child: Padding(
             padding: EdgeInsets.all(Get.height*0.01),
-            child: CircularProgressIndicator(
-              value: progress.progress,
-              color: const Color.fromARGB(255, 248, 246, 246),
+            child: Center(
+              child: CircularProgressIndicator(
+                value: progress.progress,
+              ),
             ),
           ),
         );

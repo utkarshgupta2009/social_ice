@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:social_ice/models/post_information_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/profile_screen_builder.dart';
 import 'package:social_ice/services/firebase_services.dart';
+import 'package:social_ice/utils/cachedImage.dart';
 import 'package:social_ice/widgets/app_widgets/comment_bottom_sheet.dart';
 import 'package:social_ice/utils/video_player_widget.dart';
 
@@ -29,7 +30,7 @@ class _PostWidgetState extends State<PostWidget> {
         //padding: EdgeInsets.all(Get.height * 0.018),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: Color.fromARGB(255, 226, 221, 221)),
+            color: const Color.fromARGB(255, 226, 221, 221)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -64,28 +65,7 @@ class _PostWidgetState extends State<PostWidget> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: widget.post.mediaType == MediaType.image
-                    ? Image.network(
-                        widget.post.mediaUrl.toString(),
-                        fit: BoxFit.fill,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            // Image has finished loading
-                            return child;
-                          } else {
-                            // Image is still loading
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          }
-                        },
-                      )
+                    ? CachedImage(widget.post.mediaUrl)
                     : CustomVideoPlayer(
                         videoUrl: widget.post.mediaUrl.toString()),
               ),

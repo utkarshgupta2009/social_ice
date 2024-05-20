@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:social_ice/models/chat_model.dart';
@@ -7,6 +6,8 @@ import 'package:social_ice/services/firebase_services.dart';
 import 'package:social_ice/services/firebase_services/messaging_service.dart';
 import 'package:social_ice/widgets/chat_widgets/chat_message_widget.dart';
 import 'package:social_ice/widgets/chat_widgets/chat_textfield.dart';
+import 'package:social_ice/widgets/chat_widgets/show_document_message.dart';
+import 'package:social_ice/widgets/chat_widgets/show_media_message.dart';
 
 class ChattingScreen extends StatefulWidget {
   final UserModel chattingWith;
@@ -114,7 +115,17 @@ class _ChattingScreenState extends State<ChattingScreen> {
                             itemBuilder: (context, index) {
                               ChatMessage chatData = ChatMessage.fromSnapshot(
                                   snapshot.data!.docs[index]);
-                              return ChatMessageWidget(message: chatData);
+
+                              switch (chatData.fileType) {
+                                case Filetype.image || Filetype.video:
+                                  return ShowMediaMessage(
+                                      chatMessage: chatData);
+                                case Filetype.document:
+                                  return ShowDocumentMessage(
+                                      chatMessage: chatData);
+                                default:
+                                  return ChatMessageWidget(message: chatData);
+                              }
                             }),
                       );
                     } else {
@@ -128,6 +139,9 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   flex: 9,
                   child: ChatTextfield(
                     controller: messageController,
+                    hintText: "Write a message",
+                    chatId: widget.chatId,
+                    chattingWithId: widget.chattingWith.uid.toString(),
                   ),
                 ),
                 Flexible(
@@ -136,6 +150,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                           if (messageController.text.isEmpty) {
                           } else {
                             try {
+                              String timeStamp = DateTime.now().toString();
                               String messageId = currentUserId +
                                   DateTime.now()
                                       .millisecondsSinceEpoch
@@ -144,9 +159,15 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                   messageId: messageId,
                                   senderId: currentUserId,
                                   content: messageController.text,
-                                  timestamp: Timestamp.now().toString());
+                                  timestamp: timeStamp,
+                                  fileType: Filetype.text,
+                                  filename: "text");
                               MessagingServices().sendMessage(
-                                  widget.chatId, message, messageId);
+                                  widget.chatId,
+                                  message,
+                                  messageId,
+                                  timeStamp,
+                                  widget.chattingWith.uid!);
                               messageController.clear();
                             } catch (exp) {
                               if (kDebugMode) {

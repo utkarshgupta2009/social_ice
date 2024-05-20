@@ -33,7 +33,7 @@ class _MessageScreenState extends State<MessageScreen> {
           stream: FirebaseServices.firestore
               .collection("users")
               .doc(FirebaseServices.auth.currentUser?.uid)
-              .collection("chats")
+              .collection("chats").orderBy("timestamp",descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

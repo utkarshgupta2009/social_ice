@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_ice/models/user_model.dart';
 import 'package:social_ice/screens/bottom_navigation_screens/profile_screen/user_profile_controller.dart';
+import 'package:social_ice/screens/chatting_screen/chatting_screen.dart';
 import 'package:social_ice/services/firebase_services.dart';
+import 'package:social_ice/services/firebase_services/messaging_service.dart';
 import 'package:social_ice/utils/cachedImage.dart';
 import 'package:social_ice/utils/uploadMedia.dart';
 import 'package:social_ice/widgets/app_widgets/app_button.dart';
@@ -189,7 +191,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: SizedBox(
                                   width: Get.width * 0.5,
                                   child: AppButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      String currentProfileUserId =
+                                          widget.userData.uid as String;
+                                      String currentUserId = FirebaseServices
+                                          .auth.currentUser?.uid as String;
+                                      String chatId =
+                                          currentUserId + currentProfileUserId;
+                                      MessagingServices().saveChatIdtoFirestore(
+                                          currentUserId,
+                                          currentProfileUserId,
+                                          chatId);
+                                      Get.to(() => ChattingScreen(
+                                          chatId: chatId,
+                                          chattingWith: widget.userData));
+                                    },
                                     buttonLabel: "Message",
                                     color: Colors.white,
                                     textColor: Colors.black,

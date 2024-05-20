@@ -24,7 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Padding(
             padding: EdgeInsets.only(
                 top: Get.height * 0.1, bottom: Get.height * 0.01),
-            child: Text("Buy With Reels",
+            child: Text("SOCIALice",
                 style: TextStyle(
                     fontSize: Get.height * 0.05, fontWeight: FontWeight.bold)),
           ),

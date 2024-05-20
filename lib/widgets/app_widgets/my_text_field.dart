@@ -85,7 +85,7 @@ class _MyTextFieldState extends State<MyTextField> {
             borderSide: const BorderSide(color: Colors.red, width: 2.0),
             borderRadius: BorderRadius.circular(10)),
       ),
-      obscureText: widget.obscureText== null?false:true,
+      obscureText: widget.obscureText== null?false:widget.obscureText as bool,
     );
   }
 }
