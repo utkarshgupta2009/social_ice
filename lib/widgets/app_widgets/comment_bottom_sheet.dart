@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:social_ice/widgets/app_widgets/expandable_textfield.dart';
 
 class CommentBottomSheet extends StatefulWidget {
+  const CommentBottomSheet({super.key});
+
   @override
   _CommentBottomSheetState createState() => _CommentBottomSheetState();
 }
@@ -12,27 +15,35 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: Get.height * 0.7, // Adjust this value as per your requirement
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: Get.height * 0.7,
         child: Column(
-          mainAxisSize: MainAxisSize.min, // To ensure the Column takes up the minimum required space
           children: [
-            
-            Flexible(
-              flex: 8,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ExpandableTextField(
+                      controller: _commentController,
+                      hintText: "Add a comment",
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      _commentController.clear();
+                      // Handle send action
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
               child: ListView.builder(
-                shrinkWrap: true, // To prevent ListView from expanding beyond its content
-                itemCount: 10, // Replace with your actual comment list length
+                itemCount: 20, // Replace with your actual comment list length
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: const CircleAvatar(
@@ -45,20 +56,6 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
                 },
               ),
             ),
-
-            Flexible(
-              flex: 2,
-              child: 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _commentController,
-                decoration: InputDecoration(
-                  hintText: 'Add a comment...',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),)
           ],
         ),
       ),

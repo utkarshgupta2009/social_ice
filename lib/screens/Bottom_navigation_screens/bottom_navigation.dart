@@ -18,23 +18,13 @@ class BottomNavigatorScreen extends StatefulWidget {
 }
 
 class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
-  int bottomNavigatorIndex = 0;
   final controller = Get.put(userProfileController());
+  Widget currentScreen = const HomeScreen();
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> bottom_navigation_screens_list = [
-      const HomeScreen(),
-      const ReelsScreen(),
-      NewPostScreen(),
-      ProfileScreenBuilder(
-          uid: FirebaseServices.auth.currentUser?.uid as String)
-    ];
     return Scaffold(
-      body: IndexedStack(
-        index: bottomNavigatorIndex,
-        children: bottom_navigation_screens_list,
-      ),
+      body: currentScreen,
       bottomNavigationBar: Container(
         width: Get.width,
         decoration: const BoxDecoration(color: Colors.black),
@@ -56,11 +46,36 @@ class _BottomNavigatorScreenState extends State<BottomNavigatorScreen> {
                       gap: 5,
                       padding: EdgeInsets.all(Get.height * 0.012),
                       onTabChange: (index) {
-                        setState(() {
-                          bottomNavigatorIndex = index;
-                        });
+                        switch (index) {
+                          case 0:
+                            setState(() {
+                              currentScreen = const HomeScreen();
+                            });
+                            
+                            break;
+
+                          case 1:
+                            setState(() {
+                              currentScreen = const ReelsScreen();
+                            });
+                            break;
+
+                          case 2:
+                            setState(() {
+                              currentScreen = NewPostScreen();
+                            });
+                            break;
+
+                          case 3:
+                            setState(() {
+                              currentScreen = ProfileScreenBuilder(
+                                uid: FirebaseServices.auth.currentUser!.uid,
+                              );
+                            });
+                            break;
+                        }
                       },
-                      selectedIndex: bottomNavigatorIndex,
+                      selectedIndex: 0,
                       tabs: [
                         GButton(
                           icon: Icons.home,

@@ -32,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: widget.userData.uid != FirebaseServices.auth.currentUser?.uid
             ? AppBar(
                 title: Text(widget.userData.name.toString()),
+                forceMaterialTransparency: true,
               )
             : null,
         body: ListView(
